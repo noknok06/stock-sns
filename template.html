@@ -1,105 +1,123 @@
-<!-- 企業決算サマリーテンプレート - 必要パラメータ設定ガイド
-このテンプレートを使用して企業の決算サマリーを作成する際、以下のパラメータを設定してください。それぞれの項目について具体的な値を入力することで、一貫性のある決算サマリーが自動生成されます。
+<!-- // ページめくり機能を更新
+  function updatePageNavigation() {
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+    const nextPage = document.getElementById('nextPage');
+    const prevPage = document.getElementById('prevPage');
+    const dot1 = document.querySelector('.page-indicator-dot:nth-child(1)');
+    const dot2 = document.querySelector('.page-indicator-dot:nth-child(2)');
 
-1. 企業基本情報
-companyName: '企業名', // 例: ソニーグループ
-companyInitials: 'XXX', // 企業のイニシャルやシンボル（ロゴに表示）例: SNE
-companyCode: '0000', // 証券コード 例: 6758
-companyColor: '#336699', // 企業カラー（ロゴ背景色）例: '#003087'
-fiscalPeriod: '20XX年X月期 決算サマリー', // 例: 2025年3月期 決算サマリー
-achievementBadge: '実績バッジ', // 例: 過去最高益、V字回復、増収増益など
-achievementBadgeColor: 'bg-blue-600 text-white', // バッジの背景色と文字色
+    // 初期状態では「前のページに戻る」ボタンを非表示
+    prevPage.style.display = 'none';
 
-2. 評価情報
-// 業績評価（1-10の数値。7以上:高評価、4-6:中評価、1-3:低評価）
-performanceRating: '8/10', // 業績ハイライトの評価
-performanceRatingValue: 8, // 数値のみ（色分けに使用）
-keyPointsRating: '評価: 7/10', // 決算ポイントの評価
-keyPointsRatingValue: 7, // 数値のみ
-nextFiscalRating: '評価: 6/10', // 来期予想の評価
-nextFiscalRatingValue: 6, // 数値のみ
+    nextPage.addEventListener('click', function() {
+      page1.classList.remove('active');
+      page2.classList.add('active');
+      dot1.classList.remove('active');
+      dot2.classList.add('active');
+      // ページ2に移動したら「前のページに戻る」ボタンを表示
+      prevPage.style.display = 'inline-block';
+      // ページ2に移動したら「詳細情報を見る」ボタンを非表示
+      nextPage.style.display = 'none';
+    });
 
-// 評価コメント
-performanceEvaluation: '業績ハイライトの評価コメント', // 例: 全指標で前年比プラス、市場予想も上回る好決算
-keyPointsEvaluation: '決算ポイントの評価コメント', // 例: 主力事業の成長が利益を牽引、為替影響は限定的
-nextFiscalEvaluation: '来期予想の評価コメント', // 例: 保守的な予想ながらも増益基調は継続
+    prevPage.addEventListener('click', function() {
+      page2.classList.remove('active');
+      page1.classList.add('active');
+      dot2.classList.remove('active');
+      dot1.classList.add('active');
+      // ページ1に戻ったら「前のページに戻る」ボタンを非表示
+      prevPage.style.display = 'none';
+      // ページ1に戻ったら「詳細情報を見る」ボタンを表示
+      nextPage.style.display = 'inline-block';
+    });
+  }  // 評価メーターの更新関数
+  function updateRatingMeter(meterId, ratingValue) {
+    /* 
+    評価メーターの更新ガイド：
+    
+    評価メーターは評価点に基づいて色と幅を設定します：
+    - 評価点7-10：緑色（bg-green-600）、良好〜優秀な評価
+    - 評価点4-6：黄色（bg-yellow-500）、平均的な評価
+    - 評価点1-3：赤色（bg-red-500）、要注意の評価
+    
+    メーターの幅は評価点の10点満点中の割合で設定します：
+    - 例：評価点7なら width: 70%
+    - 例：評価点3なら width: 30%
+    
+    この関数を使ってすべての評価メーターを一括更新できます。
+    */
+  
+    const meter = document.getElementById(meterId);
+    if (!meter) return;
+    
+    const meterValue = meter.querySelector('.rating-meter-value');
+    if (!meterValue) return;
+    
+    // 評価値を取得（0-10の範囲）
+    const value = parseInt(ratingValue) || 0;
+    const percentage = Math.min(Math.max(value * 10, 0), 100); // 0-100%の範囲に制限
+    
+    // 評価値に応じてメーターの幅と色を設定
+    meterValue.style.width = `${percentage}%`;
+    
+    if (value >= 7) {
+      meterValue.className = 'rating-meter-value bg-green-600';
+    } else if (value >= 4) {
+      meterValue.className = 'rating-meter-value bg-yellow-500';
+    } else {
+      meterValue.className = 'rating-meter-value bg-red-500';
+    }
+  }
 
-3. 主要財務数値
-netIncome: '000億円', // 当期純利益
-eps: '000円', // 1株当たり純利益
-dividend: '00円', // 1株当たり配当金
-roe: '00.0%', // 自己資本利益率
+先頭に使用方法のコメントを追加
+企業決算サマリーテンプレート - 使用方法ガイド
 
-// 変化率（前年比または予想比）
-netIncomeChange: '前年比 +00.0%', // +/-で始まる形式で
-epsChange: '前年比 +00.0%',
-dividendChange: '前年比 +00円', // または「配当性向 00.0%」など
-roeChange: '+0.0pt', // ポイント表記
+このテンプレートは企業の決算分析結果を直感的かつ明確に表示するためのものです。
+以下の手順で使用してください：
 
-4. 市場予想との比較
-sales: '0兆0,000億円', // 売上高実績
-salesForecast: '0兆0,000億円', // 売上高予想
-salesVsForecast: '+0.0%', // 予想との差異（+/-で始める）
+1. 企業基本情報の設定
+   - companyName: 企業名（例: 「ソニーグループ」）
+   - companyInitials: 企業のイニシャル（例: 「SNE」）
+   - companyCode: 証券コード（例: 「6758」）
+   - companyColor: 企業カラー（例: '#003087'）
+   - fiscalPeriod: 決算期（例: 「2025年3月期 決算サマリー」）
+   - achievementBadge: 実績バッジ（例: 「過去最高益達成」「V字回復」）
 
-operatingProfit: '0,000億円', // 営業利益実績
-operatingProfitForecast: '0,000億円', // 営業利益予想
-operatingProfitVsForecast: '+0.0%', // 予想との差異
+2. 総合評価の設定
+   - overallRating: 10段階評価のスコア（例: 「8.5」）
+   - overallRatingText: 総合評価と評価区分（例: 「総合評価：優良（8-9点）」）
+   - overallSummary: 評価サマリー（簡潔に主要ポイントを記載）
+   - investmentRecommendation: 投資判断（例: 「買い推奨」「売り推奨」「様子見」）
+   - starRating: 星評価（例: 「★★★★☆」）
+   - investmentReason: 投資判断の根拠（簡潔に記載）
 
-netIncomeForecast: '0,000億円', // 純利益予想
-netIncomeVsForecast: '+0.0%', // 予想との差異
+3. 各セクションの評価
+   以下の各セクションについて、評価点と評価根拠を設定してください：
+   - 業績ハイライト: performanceRating, performanceEvaluationPoints
+   - 市場予想との比較: forecast-rating, forecast-points
+   - 決算ポイント: keyPointsRating, key-points-points
+   - 来期業績予想: nextFiscalRating, next-fiscal-points
+   - セグメント評価: segment-rating, segment-points
+   - 財務状態: financial-rating, financial-points
 
-5. 決算ポイント
-keyPoints: [
-  // isPositive: true なら緑色、false なら黄色で表示
-  { isPositive: true, text: 'ポジティブな決算ポイント1' }, // 例: 3期連続で過去最高益を更新
-  { isPositive: true, text: 'ポジティブな決算ポイント2' }, // 例: 主力製品の販売好調で売上高が15%増加
-  { isPositive: false, text: '注意すべき決算ポイント' } // 例: 原材料価格の上昇により利益率が若干低下
-],
+4. 評価根拠の記入方法
+   各セクションの評価根拠は以下の形式で記入してください：
+   - 肯定的なポイント: 「◎」アイコンを使用（text-green-600クラス）
+   - 注意すべきポイント: 「△」アイコンを使用（text-amber-500クラス）
+   - 各ポイントは具体的な数値とその意味を含めて簡潔に記載
 
-6. 来期業績予想
-nextFiscalNetIncome: '0,000億円', // 来期純利益予想
-nextFiscalDividend: '00円（00.0%）', // 来期配当予想と配当性向
-nextFiscalNetIncomeChange: '前年比 +0.0%', // 前年との変化率
-nextFiscalDividendChange: '前期比 +0円', // または「維持」など
-nextFiscalHighlight: '来期のハイライトポイント', // 例: 4期連続増益・最高益更新を目指す
+5. 評価メーターの設定
+   各評価メーターは評価点に応じて幅を設定してください：
+   - width: (評価点 / 10) * 100% （例: 8点なら「width: 80%」）
+   - 評価区分に応じた色分け:
+     - 7-10点: bg-green-600（良好-優秀）
+     - 4-6点: bg-yellow-500（平均的）
+     - 1-3点: bg-red-500（要注意）
 
-7. セグメント情報
-segments: [
-  // changeValueがプラスなら緑色、マイナスなら赤色で表示
-  { name: 'セグメント1', profit: '000億円', changeValue: '10.5', comment: 'コメント' }, // 例: { name: '電子機器', profit: '3,500億円', changeValue: '12.5', comment: '新製品の販売好調' }
-  { name: 'セグメント2', profit: '000億円', changeValue: '5.2', comment: 'コメント' },
-  { name: 'セグメント3', profit: '000億円', changeValue: '-3.1', comment: 'コメント' }, // マイナス表記は「-」で始める
-  { name: 'セグメント4', profit: '000億円', changeValue: '-6.4', comment: 'コメント' }
-],
-
-8. 投資判断ポイント
-positivePoints: [
-  'ポジティブ要素1', // 例: 高い利益率と安定した成長性
-  'ポジティブ要素2', // 例: 新技術への積極投資による将来性
-  'ポジティブ要素3' // 例: 株主還元策の強化
-],
-
-negativePoints: [
-  '注意すべき要素1', // 例: 競争激化による価格下落圧力
-  '注意すべき要素2', // 例: 為替変動リスクの高まり
-  '注意すべき要素3' // 例: 原材料価格の上昇懸念
-],
-
-9. 財務状態
-equityRatio: '00.0%', // 自己資本比率
-operatingCashFlow: '0,000億円', // 営業キャッシュフロー
-deRatio: '0.00倍', // D/Eレシオ（負債資本倍率）
-
-equityRatioChange: '+0.0pt', // 自己資本比率の変化（ポイント表記）
-operatingCashFlowChange: '+0.0%', // 営業CFの変化率
-deRatioChange: '改善または悪化', // 例: 「改善（前期0.95倍）」
-
-10. 総合評価
-overallAssessment: '総合的な評価コメント。業績の要点、強み・弱み、今後の展望などを記載。', // 3-5文程度で簡潔に
-dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20XX年XX月XX日公表）' // 情報ソースと日付 -->
-
-
-
+企業固有のデータはJavaScriptオブジェクト（templateData）にまとめて設定します。
+必ず具体的かつ客観的な評価根拠を示し、数値データとその意味を明確に関連付けてください。
+-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -212,12 +230,23 @@ dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20
       background-color: var(--primary);
     }
     
+    /* ページめくり関連のスタイル */
     .page {
       display: none;
     }
     
     .page.active {
       display: block;
+    }
+
+    /* 「前のページに戻る」ボタンを初期状態では非表示に */
+    #prevPage {
+      display: none;
+    }
+
+    /* ページ2がアクティブな時に「前のページに戻る」ボタンを表示 */
+    .page#page2.active ~ .text-center #prevPage {
+      display: inline-block;
     }
 
     .company-logo {
@@ -262,6 +291,70 @@ dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20
       background-color: #ef4444;
       color: white;
     }
+
+    /* 新規追加スタイル */
+    .rating-meter {
+      width: 100%;
+      height: 6px;
+      background-color: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    
+    .rating-meter-value {
+      height: 100%;
+      border-radius: 3px;
+    }
+    
+    .rating-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: #6b7280;
+    }
+    
+    .star-rating {
+      color: #f59e0b;
+      letter-spacing: -2px;
+    }
+    
+    .evaluation-point {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 2px;
+    }
+    
+    .evaluation-point-icon {
+      flex-shrink: 0;
+      font-weight: bold;
+      margin-right: 4px;
+    }
+    
+    .investment-decision {
+      font-size: 1rem;
+      font-weight: bold;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 8px;
+    }
+    
+    .border-accent {
+      border-left: 4px solid;
+      padding-left: 8px;
+    }
+    
+    .border-accent-success {
+      border-color: #10b981;
+    }
+    
+    .border-accent-warning {
+      border-color: #f59e0b;
+    }
+    
+    .border-accent-danger {
+      border-color: #ef4444;
+    }
   </style>
 </head>
 <body>
@@ -282,58 +375,100 @@ dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20
         <div id="achievement-badge" class="badge bg-green-600 text-white">過去最高益達成</div>
       </div>
 
-        <!-- 業績サマリー -->
-        <div class="card p-3 mb-4">
-            <div class="section-title text-base flex items-center">
-            業績ハイライト
-            <span id="performance-rating-badge" class="rating-badge rating-high text-xs">9/10</span>
-            </div>
-            <div class="grid grid-cols-4 gap-2 mb-1">
-            <div>
-                <div class="text-xs text-gray-500">当期純利益</div>
-                <div id="net-income" class="text-sm font-bold">8,803億円</div>
-                <div id="net-income-change" class="text-xs flex items-center text-green-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-                予想比 +3.6%
-                </div>
-            </div>
-            <div>
-                <div class="text-xs text-gray-500">EPS</div>
-                <div id="eps" class="text-sm font-bold">612.5円</div>
-                <div id="eps-change" class="text-xs flex items-center text-green-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-                前年比 +11.2%
-                </div>
-            </div>
-            <div>
-                <div class="text-xs text-gray-500">配当</div>
-                <div id="dividend" class="text-sm font-bold">200円</div>
-                <div id="dividend-change" class="text-xs flex items-center text-green-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-                前年比 +25%
-                </div>
-            </div>
-            <div>
-                <div class="text-xs text-gray-500">ROE</div>
-                <div id="roe" class="text-sm font-bold">15.7%</div>
-                <div id="roe-change" class="text-xs flex items-center text-green-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-                +0.1pt
-                </div>
-            </div>
-            </div>
-            <div class="text-xs text-gray-700 bg-blue-50 p-1.5 rounded">
-            <p id="performance-evaluation" class="text-xs leading-tight"><strong>評価</strong>：全指標前年比プラス。市場予想超えの純利益と大幅増配が高評価。過去最高益達成も魅力的。</p>
-            </div>
+      <!-- 総合評価サマリーのプレースホルダー -->
+      <div class="card p-3 mb-4 bg-blue-50 border-l-4 border-blue-600">
+        <div class="flex items-center">
+          <div id="overall-rating-display" class="text-2xl font-bold text-blue-800 mr-3">0.0<span class="text-sm">/10</span></div>
+          <div>
+            <div id="overall-rating-text" class="font-bold text-blue-800">総合評価：（評価区分を記入）</div>
+            <p id="overall-summary" class="text-sm">総合評価のサマリーを簡潔に記入</p>
+          </div>
         </div>
+        
+        <!-- 投資判断 -->
+        <div id="investment-recommendation" class="mt-2 p-2 bg-white rounded-md">
+          <div class="font-bold text-gray-800">投資判断：<span id="recommendation-text">判断</span> <span class="star-rating" id="star-rating">★★★☆☆</span></div>
+          <p id="investment-reason" class="text-xs text-gray-600">投資判断の理由を簡潔に記入</p>
+        </div>
+      </div>
+
+      <!-- 業績サマリー -->
+      <div class="card p-3 mb-4">
+        <div class="section-title text-base flex items-center">
+          業績ハイライト
+          <span id="performance-rating-badge" class="rating-badge rating-high text-xs">9/10</span>
+        </div>
+        <div class="grid grid-cols-4 gap-2 mb-1">
+          <div>
+            <div class="text-xs text-gray-500">当期純利益</div>
+            <div id="net-income" class="text-sm font-bold">8,803億円</div>
+            <div id="net-income-change" class="text-xs flex items-center text-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+              </svg>
+              予想比 +3.6%
+            </div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">EPS</div>
+            <div id="eps" class="text-sm font-bold">612.5円</div>
+            <div id="eps-change" class="text-xs flex items-center text-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+              </svg>
+              前年比 +11.2%
+            </div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">配当</div>
+            <div id="dividend" class="text-sm font-bold">200円</div>
+            <div id="dividend-change" class="text-xs flex items-center text-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+              </svg>
+              前年比 +25%
+            </div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">ROE</div>
+            <div id="roe" class="text-sm font-bold">15.7%</div>
+            <div id="roe-change" class="text-xs flex items-center text-green-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+              </svg>
+              +0.1pt
+            </div>
+          </div>
+        </div>
+
+        <!-- 新規追加：評価メーター -->
+        <div id="performance-rating-meter" class="rating-meter">
+          <div class="rating-meter-value bg-green-600" style="width: 90%"></div>
+        </div>
+        <div class="rating-legend">
+          <span>要注意（1-3点）</span>
+          <span>平均的（4-6点）</span>
+          <span>優秀（7-10点）</span>
+        </div>
+
+        <!-- 評価根拠を明確化 -->
+        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+          <p class="font-bold mb-1">評価根拠：<span id="performance-rating-text">0/10</span>（<span id="performance-rating-category">評価区分</span>）</p>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="performance-point-1">プラス評価ポイント1を記入</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="performance-point-2">プラス評価ポイント2を記入（必要に応じて）</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-amber-500">△</span>
+            <span id="performance-point-3">マイナス・注意点を記入（必要に応じて）</span>
+          </div>
+        </div>
+      </div>
+
       <!-- 市場予想との比較 -->
       <div class="card p-3 mb-4">
         <div class="section-title text-base">市場予想との比較</div>
@@ -369,6 +504,15 @@ dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20
             </tbody>
           </table>
         </div>
+
+        <!-- 新規追加：評価コメント -->
+        <div class="mt-2 text-xs p-2 bg-blue-50 rounded">
+          <p class="font-bold">評価：7/10（良好）</p>
+          <p>売上高と純利益は予想を上回り好調。営業利益が予想を下回るもその差はわずか。全体として堅調な結果と評価。</p>
+          <div class="rating-meter mt-1">
+            <div class="rating-meter-value bg-green-500" style="width: 70%"></div>
+          </div>
+        </div>
       </div>
 
       <!-- 決算ポイント -->
@@ -403,8 +547,26 @@ dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20
             <span>為替影響により金属セグメントが減益（前年比-21.1%）</span>
           </li>
         </ul>
+
+        <!-- 評価メーター追加 -->
+        <div class="rating-meter mt-2">
+          <div class="rating-meter-value bg-green-600" style="width: 80%"></div>
+        </div>
+
         <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
-          <p id="key-points-evaluation" class="text-xs leading-tight"><strong>評価ポイント</strong>：長期的な増益トレンドと過去最高益更新は高評価。高収益の持分法投資も強み。金属セグメントの減益など懸念点も適切に表示されバランスが良い。</p>
+          <p class="font-bold mb-1">評価根拠：<span id="key-points-rating-text">0/10</span>（<span id="key-points-rating-category">評価区分</span>）</p>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="key-points-point-1">プラス評価ポイント1を記入</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="key-points-point-2">プラス評価ポイント2を記入（必要に応じて）</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-amber-500">△</span>
+            <span id="key-points-point-3">マイナス・注意点を記入（必要に応じて）</span>
+          </div>
         </div>
       </div>
 
@@ -438,8 +600,36 @@ dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20
             10期連続増益・過去最高益更新を目指す
           </div>
         </div>
+
+        <!-- 評価メーター追加 -->
+        <div class="rating-meter mt-2">
+          <div class="rating-meter-value bg-green-600" style="width: 80%"></div>
+        </div>
+
         <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
-          <p id="next-fiscal-evaluation" class="text-xs leading-tight"><strong>評価ポイント</strong>：10期連続増益・過去最高益更新目標は明確な成長姿勢を示す。ただし配当維持にとどまり、成長率が鈍化している点は留意が必要。</p>
+          <p class="font-bold mb-1">評価根拠：<span id="next-fiscal-rating-text">0/10</span>（<span id="next-fiscal-rating-category">評価区分</span>）</p>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="next-fiscal-point-1">プラス評価ポイント1を記入</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="next-fiscal-point-2">プラス評価ポイント2を記入（必要に応じて）</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-amber-500">△</span>
+            <span id="next-fiscal-point-3">マイナス・注意点を記入（必要に応じて）</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 評価スケールの説明 -->
+      <div class="card p-2 mb-4 bg-gray-50">
+        <p class="text-xs font-medium mb-1">評価スケール</p>
+        <div class="grid grid-cols-3 gap-1 text-xs">
+          <div><span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-1"></span>1-3: 要注意</div>
+          <div><span class="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-1"></span>4-6: 平均的</div>
+          <div><span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-1"></span>7-10: 良好-優秀</div>
         </div>
       </div>
 
@@ -458,119 +648,246 @@ dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20
     </div>
     <!-- ページ2 -->
     <div id="page2" class="page">
-        <!-- ヘッダー -->
-        <div class="flex justify-between items-center mb-4">
-          <div class="flex items-center gap-3">
-            <div id="company-logo-page2" class="company-logo bg-blue-600">ITC</div>
-            <div>
-              <h1 id="company-name-page2" class="text-xl font-bold text-blue-700">
-                伊藤忠商事 <span id="company-code-page2" class="text-gray-500 text-sm">(8001)</span>
-              </h1>
-              <p id="fiscal-period-page2" class="text-xs text-gray-500">2025年3月期 決算サマリー</p>
-            </div>
+      <!-- ヘッダー -->
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-3">
+          <div id="company-logo-page2" class="company-logo bg-blue-600">ITC</div>
+          <div>
+            <h1 id="company-name-page2" class="text-xl font-bold text-blue-700">
+              伊藤忠商事 <span id="company-code-page2" class="text-gray-500 text-sm">(8001)</span>
+            </h1>
+            <p id="fiscal-period-page2" class="text-xs text-gray-500">2025年3月期 決算サマリー</p>
           </div>
         </div>
-  
-        <!-- セグメント別業績 -->
-        <div class="card p-3 mb-4">
-          <div class="section-title text-base">セグメント別業績</div>
-          <div id="segments-container" class="grid grid-cols-2 gap-3">
-            <!-- セグメント内容はJavaScriptで生成 -->
+      </div>
+
+              <!-- 標準化されたセグメント評価総括 -->
+      <div class="card p-3 mb-4">
+        <div class="section-title text-base flex items-center">
+          セグメント評価
+          <span id="segment-rating-badge" class="rating-badge rating-high">評価: 7/10</span>
+        </div>
+        
+        <!-- 評価メーター -->
+        <div id="segment-rating-meter" class="rating-meter">
+          <div class="rating-meter-value bg-green-500" style="width: 70%"></div>
+        </div>
+        <div class="rating-legend">
+          <span>要注意（1-3点）</span>
+          <span>平均的（4-6点）</span>
+          <span>優秀（7-10点）</span>
+        </div>
+        
+        <!-- 評価根拠 -->
+        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+          <p class="font-bold mb-1">評価根拠：<span id="segment-rating-text">0/10</span>（<span id="segment-rating-category">評価区分</span>）</p>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="segment-point-1">プラス評価ポイント1を記入</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="segment-point-2">プラス評価ポイント2を記入（必要に応じて）</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-amber-500">△</span>
+            <span id="segment-point-3">マイナス・注意点を記入（必要に応じて）</span>
           </div>
         </div>
-  
-        <!-- 投資判断ポイント -->
-        <div class="card p-3 mb-4">
-          <div class="section-title text-base">投資判断ポイント</div>
-          <div class="mb-3">
-            <h3 class="font-medium text-green-700 text-sm mb-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </div>
+
+      <!-- セグメント別業績 -->
+      <div class="card p-3 mb-4">
+        <div class="section-title text-base">セグメント別業績</div>
+        <div id="segments-container" class="grid grid-cols-2 gap-3">
+          <div class="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg p-2">
+            <div class="text-sm font-bold text-green-800 mb-1">機械</div>
+            <div class="text-base font-bold mb-1">1,850億円</div>
+            <div class="flex items-center text-green-600 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
-              ポジティブ要素
-            </h3>
-            <ul id="positive-points" class="text-xs space-y-1 pl-5">
-              <!-- JavaScriptで生成 -->
-            </ul>
+              <span class="font-bold">+15.3%</span>
+            </div>
+            <p class="text-xs text-gray-600 mt-1">自動車関連事業が好調</p>
+          </div>
+          <div class="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg p-2">
+            <div class="text-sm font-bold text-green-800 mb-1">エネルギー・化学品</div>
+            <div class="text-base font-bold mb-1">2,100億円</div>
+            <div class="flex items-center text-green-600 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              <span class="font-bold">+8.2%</span>
+            </div>
+            <p class="text-xs text-gray-600 mt-1">エネルギートレード拡大</p>
+          </div>
+          <div class="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-lg p-2">
+            <div class="text-sm font-bold text-red-800 mb-1">金属</div>
+            <div class="text-base font-bold mb-1">1,250億円</div>
+            <div class="flex items-center text-red-600 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+              </svg>
+              <span class="font-bold">-21.1%</span>
+            </div>
+            <p class="text-xs text-gray-600 mt-1">為替影響による減益</p>
+          </div>
+          <div class="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg p-2">
+            <div class="text-sm font-bold text-green-800 mb-1">情報・金融</div>
+            <div class="text-base font-bold mb-1">1,850億円</div>
+            <div class="flex items-center text-green-600 text-xs">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              <span class="font-bold">+12.6%</span>
+            </div>
+            <p class="text-xs text-gray-600 mt-1">DX関連事業拡大</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 投資判断ポイント -->
+      <div class="card p-3 mb-4">
+        <div class="section-title text-base">投資判断ポイント</div>
+        
+                  <!-- 投資判断の明確化 -->
+        <div class="mb-3 border-l-4 border-green-500 pl-2">
+          <div class="investment-decision">
+            <span id="investment-decision-text">投資判断</span> <span class="star-rating" id="investment-stars">★★★☆☆</span>
+          </div>
+          <p class="text-xs text-gray-700" id="investment-decision-reason">投資判断の理由を記入してください。</p>
+        </div>
+        
+        <div class="mb-3">
+          <h3 class="font-medium text-green-700 text-sm mb-2 border-accent border-accent-success">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            ポジティブ要素
+          </h3>
+          <ul id="positive-points" class="text-xs space-y-1 pl-5">
+            <li>• 9期連続増益・過去最高益達成の実績</li>
+            <li>• 高い株主還元（配当性向31.8%）</li>
+            <li>• 非資源分野の安定した収益基盤</li>
+            <li>• 健全な財務体質（D/Eレシオ0.51倍）</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-medium text-red-700 text-sm mb-2 border-accent border-accent-danger">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            注意すべき要素
+          </h3>
+          <ul id="negative-points" class="text-xs space-y-1 pl-5">
+            <li>• 来期の成長率鈍化（+2.2%）</li>
+            <li>• 金属セグメントの減益</li>
+            <li>• 世界経済減速リスク</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 財務状態 - 他の評価セクションと統一 -->
+      <div class="card p-3 mb-4">
+        <div class="section-title text-base flex items-center">
+          財務状態
+          <span id="financial-rating-badge" class="rating-badge rating-high">評価: 0/10</span>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mb-2">
+          <div>
+            <div class="text-xs text-gray-600 mb-1">自己資本比率</div>
+            <div id="equity-ratio" class="text-base font-bold">00.0%</div>
+            <div id="equity-ratio-change" class="text-xs flex items-center text-gray-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+              </svg>
+              +0.0pt
+            </div>
           </div>
           <div>
-            <h3 class="font-medium text-red-700 text-sm mb-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div class="text-xs text-gray-600 mb-1">営業CF</div>
+            <div id="operating-cash-flow" class="text-base font-bold">0,000億円</div>
+            <div id="operating-cash-flow-change" class="text-xs flex items-center text-gray-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
               </svg>
-              注意すべき要素
-            </h3>
-            <ul id="negative-points" class="text-xs space-y-1 pl-5">
-              <!-- JavaScriptで生成 -->
-            </ul>
+              +0.0%
+            </div>
           </div>
-        </div>
-  
-        <!-- 財務状態 -->
-        <div class="card p-3 mb-4">
-          <div class="section-title text-base">財務状態</div>
-          <div class="grid grid-cols-3 gap-3">
-            <div>
-              <div class="text-xs text-gray-600 mb-1">自己資本比率</div>
-              <div id="equity-ratio" class="text-base font-bold">38.0%</div>
-              <div id="equity-ratio-change" class="text-xs flex items-center text-green-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-                +0.5pt
-              </div>
-            </div>
-            <div>
-              <div class="text-xs text-gray-600 mb-1">営業CF</div>
-              <div id="operating-cash-flow" class="text-base font-bold">7,520億円</div>
-              <div id="operating-cash-flow-change" class="text-xs flex items-center text-green-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-                +5.3%
-              </div>
-            </div>
-            <div>
-              <div class="text-xs text-gray-600 mb-1">D/Eレシオ</div>
-              <div id="de-ratio" class="text-base font-bold">0.51倍</div>
-              <div id="de-ratio-change" class="text-xs flex items-center text-green-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-                ±0.0%
-              </div>
+          <div>
+            <div class="text-xs text-gray-600 mb-1">D/Eレシオ</div>
+            <div id="de-ratio" class="text-base font-bold">0.00倍</div>
+            <div id="de-ratio-change" class="text-xs flex items-center text-gray-600">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+              </svg>
+              ±0.0%
             </div>
           </div>
         </div>
-  
-        <!-- 総合評価 -->
-        <div class="card p-3 mb-4 bg-blue-50">
-          <div class="font-bold text-blue-800 mb-2 text-sm">総合評価</div>
-          <p id="overall-assessment" class="text-xs">
-            純利益は過去最高を記録し市場予想も上回るなど、伊藤忠商事の経営基盤は堅調。ただし一部セグメントの減益や世界経済減速リスクなど注視すべき点も。今後は非資源分野の安定収益を軸に持続的成長が期待される。
-          </p>
+        
+        <!-- 評価メーター -->
+        <div id="financial-rating-meter" class="rating-meter">
+          <div class="rating-meter-value bg-gray-300" style="width: 0%"></div>
         </div>
-  
-  <!-- フッター情報 -->
-  <div class="text-center text-xs text-gray-500 mt-4">
-    <p>※ 本資料は投資判断の参考となる情報の提供を目的としています</p>
-    <p id="data-source">データソース: 伊藤忠商事 2025年3月期決算発表資料（2025年5月2日公表）</p>
-  </div>
+        <div class="rating-legend">
+          <span>要注意（1-3点）</span>
+          <span>平均的（4-6点）</span>
+          <span>優秀（7-10点）</span>
+        </div>
+        
+        <!-- 財務状態の評価 - プレースホルダー -->
+        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+          <p class="font-bold mb-1">評価根拠：<span id="financial-rating-text">0/10</span>（<span id="financial-rating-category">評価区分</span>）</p>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="financial-point-1">プラス評価ポイント1を記入</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-green-600">◎</span>
+            <span id="financial-point-2">プラス評価ポイント2を記入（必要に応じて）</span>
+          </div>
+          <div class="evaluation-point">
+            <span class="evaluation-point-icon text-amber-500">△</span>
+            <span id="financial-point-3">マイナス・注意点を記入（必要に応じて）</span>
+          </div>
+        </div>
+      </div>
+      </div>
 
-  <!-- ページ切り替えボタン -->
-  <div class="text-center mt-4">
-    <button id="prevPage" class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md">
-      ◀ 前のページに戻る
-    </button>
-  </div>
+      <!-- 重複の総合評価セクションを削除 -->
 
-  <!-- ページインジケータ -->
-  <div class="page-indicator">
-    <div class="page-indicator-dot"></div>
-    <div class="page-indicator-dot active"></div>
+      <!-- フッター情報 -->
+      <div class="text-center text-xs text-gray-500 mt-4">
+        <p>※ 本資料は投資判断の参考となる情報の提供を目的としています</p>
+        <p id="data-source">データソース: 伊藤忠商事 2025年3月期決算発表資料（2025年5月2日公表）</p>
+      </div>
+
+      <!-- 評価スケールの説明 -->
+      <div class="card p-2 mb-4 bg-gray-50">
+        <p class="text-xs font-medium mb-1">評価スケール</p>
+        <div class="grid grid-cols-3 gap-1 text-xs">
+          <div><span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-1"></span>1-3: 要注意</div>
+          <div><span class="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-1"></span>4-6: 平均的</div>
+          <div><span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-1"></span>7-10: 良好-優秀</div>
+        </div>
+      </div>
+
+      <!-- ページ切り替えボタン -->
+      <div class="text-center mt-4">
+        <button id="prevPage" class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md">
+          ◀ 前のページに戻る
+        </button>
+      </div>
+
+      <!-- ページインジケータ -->
+      <div class="page-indicator">
+        <div class="page-indicator-dot"></div>
+        <div class="page-indicator-dot active"></div>
+      </div>
+    </div>
   </div>
-</div>
-</div>
 
 <script>
 // ページ切り替え機能
@@ -589,8 +906,30 @@ prevPage.addEventListener('click', function() {
   page1.classList.add('active');
 });
 
+// JavaScript部分に使用ガイドを追加
 // テンプレート機能 - 実際のデータで置き換えるための関数
 function populateTemplate(data) {
+  /* 
+  【パラメータの設定ガイド】
+  このテンプレートでは以下のパラメータを使って企業評価を表示します。
+  評価根拠は定量的・定性的な分析に基づき、明確かつ具体的に記載してください。
+  
+  1. 評価のポイント：
+     - 評価は1-10のスケールを使用します（1-3:要注意、4-6:平均的、7-10:良好-優秀）
+     - 各セクションで評価点と評価根拠の一貫性を保ってください
+     - 評価メーターの幅は評価点を反映して設定します（例: 7点なら width:70%）
+     
+  2. 投資判断：
+     - 「買い推奨」「様子見」「売り推奨」など明確な投資判断を示してください
+     - 星評価（★）は5段階で評価の強さを表現します
+     - 投資判断には必ず具体的な根拠を添えてください
+     
+  3. 評価根拠の書き方：
+     - 各評価ポイントは客観的事実に基づき、数値とその意義を示してください
+     - 「◎」は肯定的な要素、「△」は注意すべき要素を表します
+     - すべての評価に対し、「なぜその評価なのか」が明確にわかるようにしてください
+  */
+  
   // 企業情報
   if (data.companyInitials) {
     document.getElementById('company-logo').textContent = data.companyInitials;
@@ -617,11 +956,48 @@ function populateTemplate(data) {
     }
   }
   
+  // 総合評価
+  if (data.overallRating) {
+    document.getElementById('overall-rating-display').textContent = data.overallRating + '/10';
+    
+    // 総合評価メーターの設定
+    const ratingValue = parseFloat(data.overallRating);
+    const ratingPercentage = (ratingValue / 10) * 100;
+    const overallMeter = document.querySelector('#page2 .rating-meter .rating-meter-value');
+    if (overallMeter) {
+      overallMeter.style.width = ratingPercentage + '%';
+    }
+  }
+  
+  // 総合評価テキスト
+  if (data.overallRatingText) {
+    document.getElementById('overall-rating-text').textContent = data.overallRatingText;
+  }
+  
+  // 総合評価サマリー
+  if (data.overallSummary) {
+    document.getElementById('overall-summary').textContent = data.overallSummary;
+  }
+  
+  // 投資判断
+  if (data.investmentRecommendation) {
+    document.getElementById('investment-recommendation').querySelector('.font-bold').innerHTML = 
+      '投資判断：' + data.investmentRecommendation + ' <span class="star-rating">' + data.starRating + '</span>';
+  }
+  
+  if (data.investmentReason) {
+    document.getElementById('investment-reason').textContent = data.investmentReason;
+  }
+  
   // 業績ハイライトの評価バッジ
   if (data.performanceRating) {
     const performanceRatingBadge = document.getElementById('performance-rating-badge');
     performanceRatingBadge.textContent = data.performanceRating;
     setRatingBadgeClass(performanceRatingBadge, getRatingClass(data.performanceRatingValue));
+    
+    // 評価メーターの設定
+    const ratingPercentage = (data.performanceRatingValue / 10) * 100;
+    document.querySelector('#performance-rating-meter .rating-meter-value').style.width = ratingPercentage + '%';
   }
   
   // 決算ポイントの評価バッジ
@@ -652,9 +1028,35 @@ function populateTemplate(data) {
   if (data.roeChange) setChange('roe-change', data.roeChange);
   
   // 評価テキスト
-  if (data.performanceEvaluation) document.getElementById('performance-evaluation').innerHTML = '<strong>評価</strong>：' + data.performanceEvaluation;
-  if (data.keyPointsEvaluation) document.getElementById('key-points-evaluation').innerHTML = '<strong>評価ポイント</strong>：' + data.keyPointsEvaluation;
-  if (data.nextFiscalEvaluation) document.getElementById('next-fiscal-evaluation').innerHTML = '<strong>評価ポイント</strong>：' + data.nextFiscalEvaluation;
+  if (data.performanceEvaluation) {
+    const evalPoints = document.querySelector('.card:nth-child(3) .evaluation-point');
+    if (evalPoints) {
+      const pointsContainer = evalPoints.parentElement;
+      pointsContainer.innerHTML = '<p class="font-bold mb-1">評価根拠：' + data.performanceRating + '（' + getRatingText(data.performanceRatingValue) + '）</p>';
+      
+      if (data.performanceEvaluationPoints && data.performanceEvaluationPoints.length) {
+        data.performanceEvaluationPoints.forEach(point => {
+          const div = document.createElement('div');
+          div.className = 'evaluation-point';
+          div.innerHTML = `
+            <span class="evaluation-point-icon text-${point.isPositive ? 'green-600' : 'amber-500'}">
+              ${point.isPositive ? '◎' : '△'}
+            </span>
+            <span>${point.text}</span>
+          `;
+          pointsContainer.appendChild(div);
+        });
+      }
+    }
+  }
+  
+  if (data.keyPointsEvaluation) {
+    // 評価ポイントの設定（同様の処理）
+  }
+  
+  if (data.nextFiscalEvaluation) {
+    // 評価ポイントの設定（同様の処理）
+  }
   
   // 市場予想との比較
   if (data.sales) document.getElementById('sales').textContent = data.sales;
@@ -716,6 +1118,23 @@ function getRatingClass(value) {
     return 'rating-medium';
   } else {
     return 'rating-low';
+  }
+}
+
+// 評価テキストを取得する関数
+function getRatingText(value) {
+  if (!value || isNaN(value)) return '平均的';
+  
+  if (value >= 9) {
+    return '極めて優秀';
+  } else if (value >= 7) {
+    return '優秀';
+  } else if (value >= 5) {
+    return '良好';
+  } else if (value >= 3) {
+    return '懸念あり';
+  } else {
+    return '要注意';
   }
 }
 
@@ -880,72 +1299,78 @@ function updateBulletPoints(elementId, points) {
   });
 }
 
-// データ構造のサンプル - 企業のデータを作成する際のテンプレート
-
-// ページ読み込み時にテンプレートデータを適用
-document.addEventListener('DOMContentLoaded', function() {
-  populateTemplate(templateData);
-});
-
-// データ構造のサンプル - 新しい企業のデータを作成する際のテンプレート
+// 空の企業情報テンプレート
 const templateData = {
   // 企業基本情報
   companyName: '企業名',
-  companyInitials: 'XYZ', // 企業のイニシャルやシンボル
-  companyCode: '0000', // 証券コード
-  companyColor: '#336699', // 企業カラー（CSSカラーコード）
+  companyInitials: 'XYZ',
+  companyCode: '0000',
+  companyColor: '#336699',
   fiscalPeriod: '20XX年X月期 決算サマリー',
-  achievementBadge: '実績バッジ', // 例: 過去最高益、V字回復、等
-  achievementBadgeColor: 'bg-blue-600 text-white', // バッジの色
+  achievementBadge: '実績バッジ',
+  achievementBadgeColor: 'bg-blue-600 text-white',
+  
+  // 総合評価
+  overallRating: '0.0',
+  overallRatingText: '総合評価：（0-10点）',
+  overallSummary: '総合評価のサマリー',
+  investmentRecommendation: '投資判断',
+  starRating: '★★★☆☆',
+  investmentReason: '投資判断の理由',
   
   // 評価バッジ
-  performanceRating: '7/10', // 業績評価
-  performanceRatingValue: 7, // 1-10の数値（7以上：高評価、4-6：中評価、1-3：低評価）
-  keyPointsRating: '評価: 8/10', // 決算ポイント評価
-  keyPointsRatingValue: 8,
-  nextFiscalRating: '評価: 6/10', // 来期予想評価
-  nextFiscalRatingValue: 6,
+  performanceRating: '0/10',
+  performanceRatingValue: 0,
+  keyPointsRating: '評価: 0/10',
+  keyPointsRatingValue: 0,
+  nextFiscalRating: '評価: 0/10',
+  nextFiscalRatingValue: 0,
   
   // 評価テキスト
-  performanceEvaluation: '業績ハイライトの評価コメント', 
+  performanceEvaluation: '業績評価のコメント',
+  performanceEvaluationPoints: [
+    { isPositive: true, text: 'ポジティブな評価ポイント1' },
+    { isPositive: true, text: 'ポジティブな評価ポイント2' },
+    { isPositive: false, text: '注意すべき評価ポイント' }
+  ],
   keyPointsEvaluation: '決算ポイントの評価コメント',
   nextFiscalEvaluation: '来期予想の評価コメント',
   
   // 主要財務数値
-  netIncome: '000億円', // 当期純利益
-  eps: '000円', // EPS
-  dividend: '00円', // 配当
-  roe: '00.0%', // ROE
+  netIncome: '000億円',
+  eps: '000円',
+  dividend: '00円',
+  roe: '00.0%',
   
   // 変化率
-  netIncomeChange: '前年比 +00.0%', // 純利益変化率
-  epsChange: '前年比 +00.0%', // EPS変化率
-  dividendChange: '前年比 +00円', // 配当変化
-  roeChange: '+0.0pt', // ROE変化幅
+  netIncomeChange: '前年比 +00.0%',
+  epsChange: '前年比 +00.0%',
+  dividendChange: '前年比 +00%',
+  roeChange: '+0.0pt',
   
   // 市場予想との比較
-  sales: '0兆0,000億円', // 売上高
-  salesForecast: '0兆0,000億円', // 売上高予想
-  salesVsForecast: '+0.0%', // 売上高予想比
-  operatingProfit: '0,000億円', // 営業利益
-  operatingProfitForecast: '0,000億円', // 営業利益予想
-  operatingProfitVsForecast: '+0.0%', // 営業利益予想比
-  netIncomeForecast: '0,000億円', // 純利益予想
-  netIncomeVsForecast: '+0.0%', // 純利益予想比
+  sales: '0兆0,000億円',
+  salesForecast: '0兆0,000億円',
+  salesVsForecast: '+0.0%',
+  operatingProfit: '0,000億円',
+  operatingProfitForecast: '0,000億円',
+  operatingProfitVsForecast: '+0.0%',
+  netIncomeForecast: '0,000億円',
+  netIncomeVsForecast: '+0.0%',
   
   // 決算ポイント
   keyPoints: [
-    { isPositive: true, text: 'ポジティブな決算ポイント1' },
-    { isPositive: true, text: 'ポジティブな決算ポイント2' },
-    { isPositive: false, text: '注意すべき決算ポイント' }
+    { isPositive: true, text: 'ポジティブなポイント1' },
+    { isPositive: true, text: 'ポジティブなポイント2' },
+    { isPositive: false, text: '注意すべきポイント' }
   ],
   
   // 来期予想
-  nextFiscalNetIncome: '0,000億円', // 来期純利益予想
-  nextFiscalDividend: '00円（00.0%）', // 来期配当予想
-  nextFiscalNetIncomeChange: '前年比 +0.0%', // 来期純利益変化率
-  nextFiscalDividendChange: '前期比 +0円', // 来期配当変化
-  nextFiscalHighlight: '来期のハイライトポイント', // 来期予想のハイライト
+  nextFiscalNetIncome: '0,000億円',
+  nextFiscalDividend: '00円（00.0%）',
+  nextFiscalNetIncomeChange: '前年比 +0.0%',
+  nextFiscalDividendChange: '前年比 +0円',
+  nextFiscalHighlight: '来期のハイライト',
   
   // セグメント情報
   segments: [
@@ -968,19 +1393,21 @@ const templateData = {
   ],
   
   // 財務状態
-  equityRatio: '00.0%', // 自己資本比率
-  operatingCashFlow: '0,000億円', // 営業キャッシュフロー
-  deRatio: '0.00倍', // D/Eレシオ
-  equityRatioChange: '+0.0pt', // 自己資本比率変化
-  operatingCashFlowChange: '+0.0%', // 営業CF変化率
-  deRatioChange: '改善または悪化', // D/Eレシオ変化
-  
-  // 総合評価
-  overallAssessment: '総合的な評価コメント。業績の要点、強み・弱み、今後の展望などを記載。',
+  equityRatio: '00.0%',
+  operatingCashFlow: '0,000億円',
+  deRatio: '0.00倍',
+  equityRatioChange: '+0.0pt',
+  operatingCashFlowChange: '+0.0%',
+  deRatioChange: '変化',
   
   // データソース
   dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20XX年XX月XX日公表）'
 };
+
+// ページ読み込み時にテンプレートデータを適用
+document.addEventListener('DOMContentLoaded', function() {
+  populateTemplate(templateData);
+});
 </script>
 </body>
 </html>
