@@ -1,6 +1,6 @@
-# 企業決算サマリーテンプレート - 説明ガイド
+# 企業決算サマリーテンプレート - 説明ガイド（改訂版）
 
-このドキュメントは、企業決算サマリーのHTML/CSSテンプレートの使用方法と各項目に入力すべきデータについて説明します。テンプレートは2ページ構成で、主要な財務指標と詳細情報を視覚的に表示できます。
+このドキュメントは、3ページ構成に拡張された企業決算サマリーのHTML/CSSテンプレートの使用方法と各項目の入力データについて説明します。テンプレートは主要な財務指標から詳細なセグメント情報まで、企業決算情報を視覚的に表示します。
 
 ## テンプレートの概要
 
@@ -12,131 +12,169 @@
 - 決算ポイント
 - 来期業績予想
 - セグメント評価
-- 投資判断ポイント
 - 財務状態
+- 投資判断ポイント（ポジティブ要素・注意すべき要素）
 
 各セクションには10点満点の評価システムが設けられており、視覚的な評価メーターで表示されます（1-3点：要注意、4-6点：平均的、7-10点：良好-優秀）。
 
+## ページ構成
+
+テンプレートは3ページ構成になっています：
+- ページ1：全体サマリーと決算ポイント
+- ページ2：業績詳細と将来予測
+- ページ3：セグメント情報と財務状態
+
 ## 各セクションの入力項目ガイド
 
-### 1. 会社情報ヘッダー
-- `company-logo`：会社の略称（3文字程度、例：TYT）
-- `company-name`：会社の正式名称（例：トヨタ自動車）
-- `company-code`：証券コード（例：7203）
-- `fiscal-period`：決算期（例：2025年3月期 決算サマリー）
-- `achievement-badge`：業績の特筆すべき成果（例：過去最高益達成）
+### 1. 会社情報ヘッダー（全ページ共通）
+- `companyAbbr`：会社の略称（3文字程度、例：TYT）
+- `companyColor`：会社ロゴの背景色（例：#3B82F6）
+- `companyName`：会社の正式名称（例：トヨタ自動車）
+- `companyCode`：証券コード（例：7203）
+- `fiscalPeriod`：決算期（例：2025年3月期 決算サマリー）
+- `achievementBadge`：業績の特筆すべき成果（例：過去最高益達成）
 
-### 2. 総合評価サマリー
-- `overall-rating-display`：総合評価点数（例：8.5/10）
-- `overall-rating-text`：総合評価の表現（例：優秀（7-9点））
-- `overall-summary`：決算の総括（150字程度）
-- `recommendation-text`：投資判断（例：買い推奨、中立、売り推奨）
-- `star-rating`：投資判断の強さを星で表示（★～★★★★★）
-- `investment-reason`：投資判断の理由（100字程度）
+### 2. 総合評価サマリー（ページ1）
+- `overallRating`：総合評価点数（例：8.5）
+- `overallRatingText`：総合評価の表現（例：優秀（7-9点））
+- `overallSummary`：決算の総括（150字程度）
+- `recommendationText`：投資判断（例：買い推奨、中立、売り推奨）
+- `starRating`：投資判断の強さを星で表示（★～★★★★★）
+- `investmentReason`：投資判断の理由（100字程度）
+- `positivePoints`：ポジティブ要素（箇条書き、5点程度）
+- `negativePoints`：注意すべき要素（箇条書き、4点程度）
 
-### 3. 業績ハイライト
-- `performance-rating-badge`：業績評価点数（例：9/10）
-- `net-income`：当期純利益（例：4兆2,680億円）
-- `net-income-change`：前年比増減率（例：+18.5%）
+### 3. 決算ポイント（ページ1）
+- `keyPointsRating`：評価点数（例：8）
+- `keyPoints`：主な決算ポイント（配列形式、各要素に`positive`と`text`プロパティ）
+  ```javascript
+  keyPoints: [
+    { positive: true, text: '為替影響（円安）により、営業利益ベースで+150億円の押し上げ効果' },
+    { positive: true, text: '主力製品の販売好調により販売数量が前年比+7.2%増加' },
+    { positive: false, text: '原材料価格の上昇により、コスト増加要因（-120億円）' }
+  ]
+  ```
+- `keyPointsRatingCategory`：評価カテゴリー（例：優秀）
+- `keyPointsPoint1~3`：評価根拠3点（各50-80字程度）
+
+### 4. 業績ハイライト（ページ2）
+- `performanceRating`：業績評価点数（例：9）
+- `netIncome`：当期純利益（例：1,200億円）
+- `netIncomeChange`：前年比増減率（例：+18.5%）
 - `eps`：1株当たり利益（例：312.8円）
-- `eps-change`：前年比増減率（例：+22.7%）
+- `epsChange`：前年比増減率（例：+22.7%）
 - `dividend`：1株当たり配当金（例：62円）
-- `dividend-change`：前年比増減率（例：+24%）
+- `dividendChange`：前年比増減率（例：+24%）
 - `roe`：自己資本利益率（例：14.8%）
-- `roe-change`：前年比増減ポイント（例：+2.3pt）
-- `performance-rating-text`：業績評価の表現（例：9/10）
-- `performance-rating-category`：評価カテゴリー（例：極めて優秀）
-- `performance-point-1~3`：評価ポイント3点（各50-80字程度）
+- `roeChange`：前年比増減ポイント（例：+2.3pt）
+- `performanceRatingCategory`：評価カテゴリー（例：極めて優秀）
+- `performancePoint1~3`：評価根拠3点（各50-80字程度）
 
-### 4. 市場予想との比較
-- `sales`：売上高実績（例：42兆1,986億円）
-- `sales-forecast`：売上高予想（例：41兆5,000億円）
-- `sales-vs-forecast`：予想比（例：+1.7%）
-- `operating-profit`：営業利益実績（例：5兆2,341億円）
-- `operating-profit-forecast`：営業利益予想（例：4兆8,000億円）
-- `operating-profit-vs-forecast`：予想比（例：+9.0%）
-- `net-income-table`：当期純利益実績（例：4兆2,680億円）
-- `net-income-forecast`：当期純利益予想（例：3兆9,500億円）
-- `net-income-vs-forecast`：予想比（例：+8.1%）
+### 5. 市場予想との比較（ページ2）
+- `sales`：売上高実績（例：8,500億円）
+- `salesForecast`：売上高予想（例：8,200億円）
+- `salesVsForecast`：予想比（例：+3.7%）
+- `operatingProfit`：営業利益実績（例：1,500億円）
+- `operatingProfitForecast`：営業利益予想（例：1,350億円）
+- `operatingProfitVsForecast`：予想比（例：+11.1%）
+- `netIncomeForecast`：当期純利益予想（例：1,100億円）
+- `netIncomeVsForecast`：予想比（例：+9.1%）
+- `forecastComparisonRating`：評価点数（例：8）
+- `forecastComparisonCategory`：評価カテゴリー（例：優秀）
+- `forecastComparisonComment`：評価コメント（100字程度）
 
-### 5. 決算ポイント
-- `key-points-rating-badge`：評価点数（例：8/10）
-- `key-points`：主な決算ポイント（肯定的・否定的な要素を含む3-5点）
-- `key-points-rating-text`：評価の表現（例：8/10）
-- `key-points-rating-category`：評価カテゴリー（例：優秀）
-- `key-points-point-1~3`：評価ポイント3点（各50-80字程度）
+### 6. 来期業績予想（ページ2）
+- `nextFiscalRating`：評価点数（例：7）
+- `nextFiscalNetIncome`：来期純利益予想（例：1,300億円）
+- `nextFiscalNetIncomeChange`：前年比増減率（例：+8.3%）
+- `nextFiscalDividend`：来期配当予想（例：68円（20.5%））
+- `nextFiscalDividendChange`：増減額（例：+6円）
+- `nextFiscalHighlight`：来期の注目ポイント（例：2期連続過去最高益更新を目指す）
+- `nextFiscalRatingCategory`：評価カテゴリー（例：良好）
+- `nextFiscalPoint1~3`：評価根拠3点（各50-80字程度）
 
-### 6. 来期業績予想
-- `next-fiscal-rating-badge`：評価点数（例：7/10）
-- `next-fiscal-net-income`：来期純利益予想（例：4兆5,000億円）
-- `next-fiscal-net-income-change`：前年比増減率（例：+5.4%）
-- `next-fiscal-dividend`：来期配当予想（例：68円（19.8%））
-- `next-fiscal-dividend-change`：増減額（例：+6円）
-- `next-fiscal-highlight`：来期の注目ポイント（例：2期連続過去最高益更新を目指す）
-- `next-fiscal-rating-text`：評価の表現（例：7/10）
-- `next-fiscal-rating-category`：評価カテゴリー（例：良好）
-- `next-fiscal-point-1~3`：評価ポイント3点（各50-80字程度）
+### 7. セグメント評価（ページ3）
+- `segmentRating`：評価点数（例：8）
+- `segmentRatingCategory`：評価カテゴリー（例：優秀）
+- `segmentPoint1~3`：評価根拠3点（各50-80字程度）
+- `segments`：セグメント別データ（配列形式）
+  ```javascript
+  segments: [
+    { name: '製造部門', value: '950億円', change: '+21.5%', description: '主力製品販売好調', profit: true },
+    { name: 'サービス部門', value: '280億円', change: '+9.8%', description: '保守契約増加', profit: true },
+    { name: '新規事業', value: '-85億円', change: '赤字継続', description: '研究開発投資継続', profit: false },
+    { name: 'その他', value: '55億円', change: '+5.2%', description: '関連事業好調', profit: true }
+  ]
+  ```
 
-### 7. セグメント評価（ページ2）
-- `segment-rating-badge`：評価点数（例：8/10）
-- `segment-rating-text`：評価の表現（例：8/10）
-- `segment-rating-category`：評価カテゴリー（例：優秀）
-- `segment-point-1~3`：評価ポイント3点（各50-80字程度）
-- セグメント別データ（自動車、金融、EV専業部門、その他）：
-  - 各セグメントの利益/損失（例：4兆1,860億円）
-  - 前年比増減率（例：+21.5%）
-  - 簡潔な説明（例：北米SUV販売好調）
+### 8. 財務状態（ページ3）
+- `financialRating`：評価点数（例：9）
+- `equityRatio`：自己資本比率（例：44.8%）
+- `equityRatioChange`：前年比増減ポイント（例：+1.2pt）
+- `operatingCashFlow`：営業キャッシュフロー（例：1,550億円）
+- `operatingCashFlowChange`：前年比増減率（例：+15.3%）
+- `liquidAssets`：手元流動性（例：2,380億円）
+- `liquidAssetsChange`：前年比増減率（例：+8.5%）
+- `financialRatingCategory`：評価カテゴリー（例：極めて優秀）
+- `financialPoint1~3`：評価根拠3点（各50-80字程度）
 
-### 8. 投資判断ポイント（ページ2）
-- `investment-decision-text`：投資判断（例：買い推奨）
-- `investment-stars`：投資判断の強さ（例：★★★★☆）
-- `investment-decision-reason`：投資判断の詳細な理由（150字程度）
-- `positive-points`：ポジティブ要素（5点程度）
-- `negative-points`：注意すべき要素（4点程度）
+### 9. フッター情報（ページ3）
+- `dataSource`：データソース（例：株式会社サンプル 2025年3月期決算発表資料（2025年5月1日公表））
 
-### 9. 財務状態（ページ2）
-- `financial-rating-badge`：評価点数（例：9/10）
-- `equity-ratio`：自己資本比率（例：44.8%）
-- `equity-ratio-change`：前年比増減ポイント（例：+1.2pt）
-- `operating-cash-flow`：営業キャッシュフロー（例：5兆2,150億円）
-- `operating-cash-flow-change`：前年比増減率（例：+15.3%）
-- `de-ratio`：手元流動性（例：6兆3,840億円）
-- `de-ratio-change`：前年比増減率（例：+8.5%）
-- `financial-rating-text`：評価の表現（例：9/10）
-- `financial-rating-category`：評価カテゴリー（例：極めて優秀）
-- `financial-point-1~3`：評価ポイント3点（各50-80字程度）
+## 評価メーターシステム
 
-### 10. フッター情報
-- `data-source`：データソース（例：トヨタ自動車 2025年3月期決算発表資料（2025年5月1日公表））
-
-## 評価システムについて
-
-評価は10点満点で、以下のカテゴリーに分類されます：
+各評価セクションには視覚的な評価メーターが設けられており、点数に応じて自動的に幅と色が変更されます：
 - 1-3点：要注意（赤色）
 - 4-6点：平均的（黄色）
 - 7-10点：良好-優秀（緑色）
 
-各評価セクションでは、点数に応じて自動的に評価メーターの幅と色が変更されます。
-
-## テンプレートのカスタマイズ
-
-各企業の特性に合わせて、以下の要素をカスタマイズすることができます：
-1. 企業ロゴの背景色
-2. 表示する財務指標（業種によってROEの代わりにROA等）
-3. セグメント構成（業種特有のセグメントに変更）
-4. 評価カテゴリーと点数基準
-
 ## JavaScript関数
 
 テンプレートには以下のJavaScript関数が含まれています：
-- `updatePageNavigation()`：ページ切り替え機能
+- `setCompanyData(data)`：すべてのデータを一括設定する関数
+- `goToPage(pageNumber)`：ページ切り替え機能
 - `updateRatingMeter(meterId, ratingValue)`：評価メーターの更新
 
-これらの関数を活用して、動的にコンテンツを更新することができます。
+## データ設定方法
+
+テンプレートのデータ設定は、`setCompanyData(data)`関数を使用します。以下のようにデータオブジェクトを作成し、関数に渡します：
+
+```javascript
+const companyData = {
+  // 会社情報
+  companyAbbr: 'ABC',
+  companyColor: '#3B82F6',
+  companyName: '株式会社サンプル',
+  companyCode: '1234',
+  fiscalPeriod: '2025年3月期 決算サマリー',
+  achievementBadge: '過去最高益達成',
+  
+  // 総合評価
+  overallRating: '8.5',
+  overallRatingText: '優秀（7-9点）',
+  overallSummary: '円安進行と主力製品の販売好調で過去最高益を更新。通期予想も上方修正し、配当増額と自社株買いを拡大。',
+  
+  // 他のデータも同様に設定
+  // ...
+};
+
+// データを適用
+setCompanyData(companyData);
+```
 
 ## テンプレート使用のポイント
 
-1. 各項目のID値を正確に設定し、JavaScriptで値を更新
-2. 評価点数に応じたメーターの自動調整を活用
-3. 複数ページの構成を活かし、概要と詳細情報を適切に分割
-4. 色分けを使って、良好・注意すべき要素を視覚的に区別
+1. レスポンシブデザイン対応：様々な画面サイズに対応した表示
+2. 評価メーターによる直感的な業績把握
+3. 3ページ構造による詳細情報の整理
+4. 色分けによる重要ポイントの視覚的区別（ポジティブ：緑色、注意点：赤色）
+5. ページナビゲーションによる簡単な画面切り替え
+6. 評価根拠の明示による判断材料の提供
+
+## カスタマイズオプション
+
+各企業の特性に合わせて、以下の要素をカスタマイズできます：
+1. 企業ロゴの背景色と略称
+2. 表示する財務指標（業種によってROEの代わりにROA等）
+3. セグメント構成（業種特有のセグメントに変更）
+4. 評価基準と表示カテゴリー
