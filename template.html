@@ -1,0 +1,986 @@
+<!-- 企業決算サマリーテンプレート - 必要パラメータ設定ガイド
+このテンプレートを使用して企業の決算サマリーを作成する際、以下のパラメータを設定してください。それぞれの項目について具体的な値を入力することで、一貫性のある決算サマリーが自動生成されます。
+
+1. 企業基本情報
+companyName: '企業名', // 例: ソニーグループ
+companyInitials: 'XXX', // 企業のイニシャルやシンボル（ロゴに表示）例: SNE
+companyCode: '0000', // 証券コード 例: 6758
+companyColor: '#336699', // 企業カラー（ロゴ背景色）例: '#003087'
+fiscalPeriod: '20XX年X月期 決算サマリー', // 例: 2025年3月期 決算サマリー
+achievementBadge: '実績バッジ', // 例: 過去最高益、V字回復、増収増益など
+achievementBadgeColor: 'bg-blue-600 text-white', // バッジの背景色と文字色
+
+2. 評価情報
+// 業績評価（1-10の数値。7以上:高評価、4-6:中評価、1-3:低評価）
+performanceRating: '8/10', // 業績ハイライトの評価
+performanceRatingValue: 8, // 数値のみ（色分けに使用）
+keyPointsRating: '評価: 7/10', // 決算ポイントの評価
+keyPointsRatingValue: 7, // 数値のみ
+nextFiscalRating: '評価: 6/10', // 来期予想の評価
+nextFiscalRatingValue: 6, // 数値のみ
+
+// 評価コメント
+performanceEvaluation: '業績ハイライトの評価コメント', // 例: 全指標で前年比プラス、市場予想も上回る好決算
+keyPointsEvaluation: '決算ポイントの評価コメント', // 例: 主力事業の成長が利益を牽引、為替影響は限定的
+nextFiscalEvaluation: '来期予想の評価コメント', // 例: 保守的な予想ながらも増益基調は継続
+
+3. 主要財務数値
+netIncome: '000億円', // 当期純利益
+eps: '000円', // 1株当たり純利益
+dividend: '00円', // 1株当たり配当金
+roe: '00.0%', // 自己資本利益率
+
+// 変化率（前年比または予想比）
+netIncomeChange: '前年比 +00.0%', // +/-で始まる形式で
+epsChange: '前年比 +00.0%',
+dividendChange: '前年比 +00円', // または「配当性向 00.0%」など
+roeChange: '+0.0pt', // ポイント表記
+
+4. 市場予想との比較
+sales: '0兆0,000億円', // 売上高実績
+salesForecast: '0兆0,000億円', // 売上高予想
+salesVsForecast: '+0.0%', // 予想との差異（+/-で始める）
+
+operatingProfit: '0,000億円', // 営業利益実績
+operatingProfitForecast: '0,000億円', // 営業利益予想
+operatingProfitVsForecast: '+0.0%', // 予想との差異
+
+netIncomeForecast: '0,000億円', // 純利益予想
+netIncomeVsForecast: '+0.0%', // 予想との差異
+
+5. 決算ポイント
+keyPoints: [
+  // isPositive: true なら緑色、false なら黄色で表示
+  { isPositive: true, text: 'ポジティブな決算ポイント1' }, // 例: 3期連続で過去最高益を更新
+  { isPositive: true, text: 'ポジティブな決算ポイント2' }, // 例: 主力製品の販売好調で売上高が15%増加
+  { isPositive: false, text: '注意すべき決算ポイント' } // 例: 原材料価格の上昇により利益率が若干低下
+],
+
+6. 来期業績予想
+nextFiscalNetIncome: '0,000億円', // 来期純利益予想
+nextFiscalDividend: '00円（00.0%）', // 来期配当予想と配当性向
+nextFiscalNetIncomeChange: '前年比 +0.0%', // 前年との変化率
+nextFiscalDividendChange: '前期比 +0円', // または「維持」など
+nextFiscalHighlight: '来期のハイライトポイント', // 例: 4期連続増益・最高益更新を目指す
+
+7. セグメント情報
+segments: [
+  // changeValueがプラスなら緑色、マイナスなら赤色で表示
+  { name: 'セグメント1', profit: '000億円', changeValue: '10.5', comment: 'コメント' }, // 例: { name: '電子機器', profit: '3,500億円', changeValue: '12.5', comment: '新製品の販売好調' }
+  { name: 'セグメント2', profit: '000億円', changeValue: '5.2', comment: 'コメント' },
+  { name: 'セグメント3', profit: '000億円', changeValue: '-3.1', comment: 'コメント' }, // マイナス表記は「-」で始める
+  { name: 'セグメント4', profit: '000億円', changeValue: '-6.4', comment: 'コメント' }
+],
+
+8. 投資判断ポイント
+positivePoints: [
+  'ポジティブ要素1', // 例: 高い利益率と安定した成長性
+  'ポジティブ要素2', // 例: 新技術への積極投資による将来性
+  'ポジティブ要素3' // 例: 株主還元策の強化
+],
+
+negativePoints: [
+  '注意すべき要素1', // 例: 競争激化による価格下落圧力
+  '注意すべき要素2', // 例: 為替変動リスクの高まり
+  '注意すべき要素3' // 例: 原材料価格の上昇懸念
+],
+
+9. 財務状態
+equityRatio: '00.0%', // 自己資本比率
+operatingCashFlow: '0,000億円', // 営業キャッシュフロー
+deRatio: '0.00倍', // D/Eレシオ（負債資本倍率）
+
+equityRatioChange: '+0.0pt', // 自己資本比率の変化（ポイント表記）
+operatingCashFlowChange: '+0.0%', // 営業CFの変化率
+deRatioChange: '改善または悪化', // 例: 「改善（前期0.95倍）」
+
+10. 総合評価
+overallAssessment: '総合的な評価コメント。業績の要点、強み・弱み、今後の展望などを記載。', // 3-5文程度で簡潔に
+dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20XX年XX月XX日公表）' // 情報ソースと日付 -->
+
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企業決算サマリー テンプレート</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #dbeafe;
+      --primary-dark: #1e3a8a;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8fafc;
+      color: #1f2937;
+    }
+    
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .section-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .section-title::before {
+      content: '';
+      width: 6px;
+      height: 20px;
+      background-color: var(--primary);
+      margin-right: 0.5rem;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    
+    .metric-change {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.125rem 0.375rem;
+      border-radius: 9999px;
+    }
+    
+    .positive {
+      color: var(--success);
+      background-color: var(--success-light);
+    }
+    
+    .negative {
+      color: var(--danger);
+      background-color: var(--danger-light);
+    }
+    
+    .neutral {
+      color: var(--gray);
+      background-color: var(--gray-light);
+    }
+    
+    .page-indicator {
+      display: flex;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+    
+    .page-indicator-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #e5e7eb;
+      margin: 0 3px;
+    }
+    
+    .page-indicator-dot.active {
+      background-color: var(--primary);
+    }
+    
+    .page {
+      display: none;
+    }
+    
+    .page.active {
+      display: block;
+    }
+
+    .company-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      font-size: 1.125rem;
+      color: white;
+    }
+
+    .chart-bar {
+      height: 8px;
+      margin: 1px 0;
+      border-radius: 4px;
+    }
+    
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+    
+    .rating-high {
+      background-color: #10b981;
+      color: white;
+    }
+    
+    .rating-medium {
+      background-color: #f59e0b;
+      color: white;
+    }
+    
+    .rating-low {
+      background-color: #ef4444;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ページ1 -->
+    <div id="page1" class="page active">
+      <!-- ヘッダー -->
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center gap-3">
+          <div id="company-logo" class="company-logo bg-blue-600">ITC</div>
+          <div>
+            <h1 id="company-name" class="text-xl font-bold text-blue-700">
+              伊藤忠商事 <span id="company-code" class="text-gray-500 text-sm">(8001)</span>
+            </h1>
+            <p id="fiscal-period" class="text-xs text-gray-500">2025年3月期 決算サマリー</p>
+          </div>
+        </div>
+        <div id="achievement-badge" class="badge bg-green-600 text-white">過去最高益達成</div>
+      </div>
+
+        <!-- 業績サマリー -->
+        <div class="card p-3 mb-4">
+            <div class="section-title text-base flex items-center">
+            業績ハイライト
+            <span id="performance-rating-badge" class="rating-badge rating-high text-xs">9/10</span>
+            </div>
+            <div class="grid grid-cols-4 gap-2 mb-1">
+            <div>
+                <div class="text-xs text-gray-500">当期純利益</div>
+                <div id="net-income" class="text-sm font-bold">8,803億円</div>
+                <div id="net-income-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                予想比 +3.6%
+                </div>
+            </div>
+            <div>
+                <div class="text-xs text-gray-500">EPS</div>
+                <div id="eps" class="text-sm font-bold">612.5円</div>
+                <div id="eps-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                前年比 +11.2%
+                </div>
+            </div>
+            <div>
+                <div class="text-xs text-gray-500">配当</div>
+                <div id="dividend" class="text-sm font-bold">200円</div>
+                <div id="dividend-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                前年比 +25%
+                </div>
+            </div>
+            <div>
+                <div class="text-xs text-gray-500">ROE</div>
+                <div id="roe" class="text-sm font-bold">15.7%</div>
+                <div id="roe-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                +0.1pt
+                </div>
+            </div>
+            </div>
+            <div class="text-xs text-gray-700 bg-blue-50 p-1.5 rounded">
+            <p id="performance-evaluation" class="text-xs leading-tight"><strong>評価</strong>：全指標前年比プラス。市場予想超えの純利益と大幅増配が高評価。過去最高益達成も魅力的。</p>
+            </div>
+        </div>
+      <!-- 市場予想との比較 -->
+      <div class="card p-3 mb-4">
+        <div class="section-title text-base">市場予想との比較</div>
+        <div class="overflow-x-auto -mx-3">
+          <table class="w-full text-xs">
+            <thead class="bg-blue-50">
+              <tr>
+                <th class="py-2 px-3 text-left font-medium text-blue-800">指標</th>
+                <th class="py-2 px-3 text-left font-medium text-blue-800">実績</th>
+                <th class="py-2 px-3 text-left font-medium text-blue-800">予想</th>
+                <th class="py-2 px-3 text-left font-medium text-blue-800">予想比</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-100">
+                <td class="py-2 px-3">売上高</td>
+                <td id="sales" class="py-2 px-3 font-bold">14兆7,242億円</td>
+                <td id="sales-forecast" class="py-2 px-3">14兆5,000億円</td>
+                <td id="sales-vs-forecast" class="py-2 px-3 text-green-600">+1.5%</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="py-2 px-3">営業利益</td>
+                <td id="operating-profit" class="py-2 px-3 font-bold">6,839億円</td>
+                <td id="operating-profit-forecast" class="py-2 px-3">7,000億円</td>
+                <td id="operating-profit-vs-forecast" class="py-2 px-3 text-red-600">-2.3%</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3">当期純利益</td>
+                <td id="net-income-table" class="py-2 px-3 font-bold">8,803億円</td>
+                <td id="net-income-forecast" class="py-2 px-3">8,500億円</td>
+                <td id="net-income-vs-forecast" class="py-2 px-3 text-green-600">+3.6%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 決算ポイント -->
+      <div class="card p-3 mb-4">
+        <div class="section-title text-base flex items-center">
+          決算ポイント
+          <span id="key-points-rating-badge" class="rating-badge rating-high">評価: 8/10</span>
+        </div>
+        <ul id="key-points" class="space-y-2 text-sm">
+          <li class="flex items-start gap-2">
+            <div class="flex-shrink-0 h-5 w-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </div>
+            <span>9期連続増益、純利益は過去最高を更新（前年比+9.8%）</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <div class="flex-shrink-0 h-5 w-5 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </div>
+            <span>持分法による投資利益が10.4%増の3,493億円と大幅増加</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <div class="flex-shrink-0 h-5 w-5 bg-amber-100 rounded-full flex items-center justify-center mt-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <span>為替影響により金属セグメントが減益（前年比-21.1%）</span>
+          </li>
+        </ul>
+        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+          <p id="key-points-evaluation" class="text-xs leading-tight"><strong>評価ポイント</strong>：長期的な増益トレンドと過去最高益更新は高評価。高収益の持分法投資も強み。金属セグメントの減益など懸念点も適切に表示されバランスが良い。</p>
+        </div>
+      </div>
+
+      <!-- 来期業績予想 -->
+      <div class="card p-3 mb-4">
+        <div class="section-title text-base flex items-center">
+          来期業績予想
+          <span id="next-fiscal-rating-badge" class="rating-badge rating-high">評価: 8/10</span>
+        </div>
+        <div class="bg-blue-50 rounded-lg p-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <div class="text-xs text-gray-600 mb-1">当期純利益</div>
+              <div id="next-fiscal-net-income" class="text-base font-bold">9,000億円</div>
+              <span id="next-fiscal-net-income-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                前年比 +2.2%
+              </span>
+            </div>
+            <div>
+              <div class="text-xs text-gray-600 mb-1">配当（配当性向）</div>
+              <div id="next-fiscal-dividend" class="text-base font-bold">200円（31.8%）</div>
+              <span id="next-fiscal-dividend-change" class="text-xs text-gray-600">
+                維持
+              </span>
+            </div>
+          </div>
+          <div id="next-fiscal-highlight" class="mt-3 text-xs text-blue-700 font-medium text-center">
+            10期連続増益・過去最高益更新を目指す
+          </div>
+        </div>
+        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+          <p id="next-fiscal-evaluation" class="text-xs leading-tight"><strong>評価ポイント</strong>：10期連続増益・過去最高益更新目標は明確な成長姿勢を示す。ただし配当維持にとどまり、成長率が鈍化している点は留意が必要。</p>
+        </div>
+      </div>
+
+      <!-- ページ切り替えボタン -->
+      <div class="text-center">
+        <button id="nextPage" class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md">
+          詳細情報を見る ▶
+        </button>
+      </div>
+
+      <!-- ページインジケータ -->
+      <div class="page-indicator">
+        <div class="page-indicator-dot active"></div>
+        <div class="page-indicator-dot"></div>
+      </div>
+    </div>
+    <!-- ページ2 -->
+    <div id="page2" class="page">
+        <!-- ヘッダー -->
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center gap-3">
+            <div id="company-logo-page2" class="company-logo bg-blue-600">ITC</div>
+            <div>
+              <h1 id="company-name-page2" class="text-xl font-bold text-blue-700">
+                伊藤忠商事 <span id="company-code-page2" class="text-gray-500 text-sm">(8001)</span>
+              </h1>
+              <p id="fiscal-period-page2" class="text-xs text-gray-500">2025年3月期 決算サマリー</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- セグメント別業績 -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base">セグメント別業績</div>
+          <div id="segments-container" class="grid grid-cols-2 gap-3">
+            <!-- セグメント内容はJavaScriptで生成 -->
+          </div>
+        </div>
+  
+        <!-- 投資判断ポイント -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base">投資判断ポイント</div>
+          <div class="mb-3">
+            <h3 class="font-medium text-green-700 text-sm mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              ポジティブ要素
+            </h3>
+            <ul id="positive-points" class="text-xs space-y-1 pl-5">
+              <!-- JavaScriptで生成 -->
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-medium text-red-700 text-sm mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              注意すべき要素
+            </h3>
+            <ul id="negative-points" class="text-xs space-y-1 pl-5">
+              <!-- JavaScriptで生成 -->
+            </ul>
+          </div>
+        </div>
+  
+        <!-- 財務状態 -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base">財務状態</div>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <div class="text-xs text-gray-600 mb-1">自己資本比率</div>
+              <div id="equity-ratio" class="text-base font-bold">38.0%</div>
+              <div id="equity-ratio-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                +0.5pt
+              </div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-600 mb-1">営業CF</div>
+              <div id="operating-cash-flow" class="text-base font-bold">7,520億円</div>
+              <div id="operating-cash-flow-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                +5.3%
+              </div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-600 mb-1">D/Eレシオ</div>
+              <div id="de-ratio" class="text-base font-bold">0.51倍</div>
+              <div id="de-ratio-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                ±0.0%
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- 総合評価 -->
+        <div class="card p-3 mb-4 bg-blue-50">
+          <div class="font-bold text-blue-800 mb-2 text-sm">総合評価</div>
+          <p id="overall-assessment" class="text-xs">
+            純利益は過去最高を記録し市場予想も上回るなど、伊藤忠商事の経営基盤は堅調。ただし一部セグメントの減益や世界経済減速リスクなど注視すべき点も。今後は非資源分野の安定収益を軸に持続的成長が期待される。
+          </p>
+        </div>
+  
+  <!-- フッター情報 -->
+  <div class="text-center text-xs text-gray-500 mt-4">
+    <p>※ 本資料は投資判断の参考となる情報の提供を目的としています</p>
+    <p id="data-source">データソース: 伊藤忠商事 2025年3月期決算発表資料（2025年5月2日公表）</p>
+  </div>
+
+  <!-- ページ切り替えボタン -->
+  <div class="text-center mt-4">
+    <button id="prevPage" class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md">
+      ◀ 前のページに戻る
+    </button>
+  </div>
+
+  <!-- ページインジケータ -->
+  <div class="page-indicator">
+    <div class="page-indicator-dot"></div>
+    <div class="page-indicator-dot active"></div>
+  </div>
+</div>
+</div>
+
+<script>
+// ページ切り替え機能
+const page1 = document.getElementById('page1');
+const page2 = document.getElementById('page2');
+const nextPage = document.getElementById('nextPage');
+const prevPage = document.getElementById('prevPage');
+
+nextPage.addEventListener('click', function() {
+  page1.classList.remove('active');
+  page2.classList.add('active');
+});
+
+prevPage.addEventListener('click', function() {
+  page2.classList.remove('active');
+  page1.classList.add('active');
+});
+
+// テンプレート機能 - 実際のデータで置き換えるための関数
+function populateTemplate(data) {
+  // 企業情報
+  if (data.companyInitials) {
+    document.getElementById('company-logo').textContent = data.companyInitials;
+    document.getElementById('company-logo-page2').textContent = data.companyInitials;
+  }
+  
+  if (data.companyName) {
+    document.getElementById('company-name').innerHTML = data.companyName + ' <span id="company-code" class="text-gray-500 text-sm">(' + data.companyCode + ')</span>';
+    document.getElementById('company-name-page2').innerHTML = data.companyName + ' <span id="company-code-page2" class="text-gray-500 text-sm">(' + data.companyCode + ')</span>';
+  }
+  
+  if (data.fiscalPeriod) {
+    document.getElementById('fiscal-period').textContent = data.fiscalPeriod;
+    document.getElementById('fiscal-period-page2').textContent = data.fiscalPeriod;
+  }
+  
+  if (data.achievementBadge) {
+    const badge = document.getElementById('achievement-badge');
+    badge.textContent = data.achievementBadge;
+    
+    // 実績バッジの色を設定（オプション）
+    if (data.achievementBadgeColor) {
+      badge.className = 'badge ' + data.achievementBadgeColor;
+    }
+  }
+  
+  // 業績ハイライトの評価バッジ
+  if (data.performanceRating) {
+    const performanceRatingBadge = document.getElementById('performance-rating-badge');
+    performanceRatingBadge.textContent = data.performanceRating;
+    setRatingBadgeClass(performanceRatingBadge, getRatingClass(data.performanceRatingValue));
+  }
+  
+  // 決算ポイントの評価バッジ
+  if (data.keyPointsRating) {
+    const keyPointsRatingBadge = document.getElementById('key-points-rating-badge');
+    keyPointsRatingBadge.textContent = data.keyPointsRating;
+    setRatingBadgeClass(keyPointsRatingBadge, getRatingClass(data.keyPointsRatingValue));
+  }
+  
+  // 来期業績予想の評価バッジ
+  if (data.nextFiscalRating) {
+    const nextFiscalRatingBadge = document.getElementById('next-fiscal-rating-badge');
+    nextFiscalRatingBadge.textContent = data.nextFiscalRating;
+    setRatingBadgeClass(nextFiscalRatingBadge, getRatingClass(data.nextFiscalRatingValue));
+  }
+  
+  // 主要財務データ
+  if (data.netIncome) document.getElementById('net-income').textContent = data.netIncome;
+  if (data.netIncome) document.getElementById('net-income-table').textContent = data.netIncome;
+  if (data.eps) document.getElementById('eps').textContent = data.eps;
+  if (data.dividend) document.getElementById('dividend').textContent = data.dividend;
+  if (data.roe) document.getElementById('roe').textContent = data.roe;
+  
+  // 前年比/予想比
+  if (data.netIncomeChange) setChange('net-income-change', data.netIncomeChange);
+  if (data.epsChange) setChange('eps-change', data.epsChange);
+  if (data.dividendChange) setChange('dividend-change', data.dividendChange);
+  if (data.roeChange) setChange('roe-change', data.roeChange);
+  
+  // 評価テキスト
+  if (data.performanceEvaluation) document.getElementById('performance-evaluation').innerHTML = '<strong>評価</strong>：' + data.performanceEvaluation;
+  if (data.keyPointsEvaluation) document.getElementById('key-points-evaluation').innerHTML = '<strong>評価ポイント</strong>：' + data.keyPointsEvaluation;
+  if (data.nextFiscalEvaluation) document.getElementById('next-fiscal-evaluation').innerHTML = '<strong>評価ポイント</strong>：' + data.nextFiscalEvaluation;
+  
+  // 市場予想との比較
+  if (data.sales) document.getElementById('sales').textContent = data.sales;
+  if (data.salesForecast) document.getElementById('sales-forecast').textContent = data.salesForecast;
+  if (data.salesVsForecast) setComparisonValue('sales-vs-forecast', data.salesVsForecast);
+  
+  if (data.operatingProfit) document.getElementById('operating-profit').textContent = data.operatingProfit;
+  if (data.operatingProfitForecast) document.getElementById('operating-profit-forecast').textContent = data.operatingProfitForecast;
+  if (data.operatingProfitVsForecast) setComparisonValue('operating-profit-vs-forecast', data.operatingProfitVsForecast);
+  
+  if (data.netIncomeForecast) document.getElementById('net-income-forecast').textContent = data.netIncomeForecast;
+  if (data.netIncomeVsForecast) setComparisonValue('net-income-vs-forecast', data.netIncomeVsForecast);
+  
+  // 決算ポイント
+  if (data.keyPoints && data.keyPoints.length) updateKeyPoints('key-points', data.keyPoints);
+  
+  // 来期予想
+  if (data.nextFiscalNetIncome) document.getElementById('next-fiscal-net-income').textContent = data.nextFiscalNetIncome;
+  if (data.nextFiscalDividend) document.getElementById('next-fiscal-dividend').textContent = data.nextFiscalDividend;
+  if (data.nextFiscalNetIncomeChange) setChange('next-fiscal-net-income-change', data.nextFiscalNetIncomeChange);
+  if (data.nextFiscalDividendChange) document.getElementById('next-fiscal-dividend-change').textContent = data.nextFiscalDividendChange;
+  if (data.nextFiscalHighlight) document.getElementById('next-fiscal-highlight').textContent = data.nextFiscalHighlight;
+  
+  // セグメント情報
+  if (data.segments && data.segments.length) updateSegments(data.segments);
+  
+  // 投資判断ポイント
+  if (data.positivePoints && data.positivePoints.length) updateBulletPoints('positive-points', data.positivePoints);
+  if (data.negativePoints && data.negativePoints.length) updateBulletPoints('negative-points', data.negativePoints);
+  
+  // 財務状態
+  if (data.equityRatio) document.getElementById('equity-ratio').textContent = data.equityRatio;
+  if (data.operatingCashFlow) document.getElementById('operating-cash-flow').textContent = data.operatingCashFlow;
+  if (data.deRatio) document.getElementById('de-ratio').textContent = data.deRatio;
+  if (data.equityRatioChange) setChange('equity-ratio-change', data.equityRatioChange);
+  if (data.operatingCashFlowChange) setChange('operating-cash-flow-change', data.operatingCashFlowChange);
+  if (data.deRatioChange) setChange('de-ratio-change', data.deRatioChange);
+  
+  // 総合評価
+  if (data.overallAssessment) document.getElementById('overall-assessment').textContent = data.overallAssessment;
+  
+  // データソース
+  if (data.dataSource) document.getElementById('data-source').textContent = data.dataSource;
+  
+  // ロゴの色を設定
+  if (data.companyColor) {
+    document.getElementById('company-logo').style.backgroundColor = data.companyColor;
+    document.getElementById('company-logo-page2').style.backgroundColor = data.companyColor;
+  }
+}
+
+// 評価ポイントに応じたクラスを取得する関数
+function getRatingClass(value) {
+  if (!value || isNaN(value)) return 'rating-medium';
+  
+  if (value >= 7) {
+    return 'rating-high';
+  } else if (value >= 4) {
+    return 'rating-medium';
+  } else {
+    return 'rating-low';
+  }
+}
+
+// 評価バッジのクラスを設定する関数
+function setRatingBadgeClass(element, className) {
+  if (!element) return;
+  
+  element.classList.remove('rating-high', 'rating-medium', 'rating-low');
+  element.classList.add(className);
+}
+
+// 変化率を設定する関数（増加/減少に応じて表示を変える）
+function setChange(elementId, change) {
+  const element = document.getElementById(elementId);
+  if (!element || !change) return;
+  
+  // 数値と単位を分離（例: +10.5% → 10.5 と %）
+  const matches = change.match(/([+-])?\s*(\d+\.?\d*)\s*([^\d\s]+)?/);
+  if (!matches) {
+    // マッチしない場合はそのまま表示
+    element.textContent = change;
+    return;
+  }
+  
+  const direction = matches[1] || '+';
+  const value = matches[2];
+  const unit = matches[3] || '%';
+  
+  // 増加/減少に応じてアイコンとクラスを設定
+  if (direction === '+' || change === '±0.0%' || change === '維持') {
+    element.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+      </svg>
+      ${change}
+    `;
+    element.classList.remove('text-red-600', 'text-gray-600');
+    element.classList.add('text-green-600');
+    
+    // 特殊なケース
+    if (change === '±0.0%' || change === '維持') {
+      element.classList.remove('text-green-600');
+      element.classList.add('text-gray-600');
+    }
+  } else {
+    element.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+      ${change}
+    `;
+    element.classList.remove('text-green-600', 'text-gray-600');
+    element.classList.add('text-red-600');
+  }
+}
+
+// 予想比較値を設定する関数
+function setComparisonValue(elementId, value) {
+  const element = document.getElementById(elementId);
+  if (!element || !value) return;
+  
+  // 値がプラスかマイナスかで色分け
+  if (value.startsWith('+')) {
+    element.classList.remove('text-red-600');
+    element.classList.add('text-green-600');
+  } else if (value.startsWith('-')) {
+    element.classList.remove('text-green-600');
+    element.classList.add('text-red-600');
+  }
+  
+  element.textContent = value;
+}
+
+// キーポイントを更新する関数
+function updateKeyPoints(elementId, points) {
+  if (!points || !points.length) return;
+  
+  const container = document.getElementById(elementId);
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  points.forEach(point => {
+    const icon = point.isPositive ? 
+      `<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>` : 
+      `<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>`;
+    
+    const bgColor = point.isPositive ? 'bg-green-100' : 'bg-amber-100';
+    const iconColor = point.isPositive ? 'text-green-600' : 'text-amber-600';
+    
+    const li = document.createElement('li');
+    li.className = 'flex items-start gap-2';
+    li.innerHTML = `
+      <div class="flex-shrink-0 h-5 w-5 ${bgColor} rounded-full flex items-center justify-center mt-0.5">
+        ${icon}
+      </div>
+      <span>${point.text}</span>
+    `;
+    
+    container.appendChild(li);
+  });
+}
+
+// セグメント情報を更新する関数
+function updateSegments(segments) {
+  if (!segments || !segments.length) return;
+  
+  const container = document.getElementById('segments-container');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  segments.forEach((segment, index) => {
+    const isPositive = parseFloat(segment.changeValue) >= 0;
+    const gradientClass = isPositive ? 
+      'bg-gradient-to-br from-green-50 to-green-100 border border-green-200' : 
+      'bg-gradient-to-br from-red-50 to-red-100 border border-red-200';
+    const textColorClass = isPositive ? 'text-green-800' : 'text-red-800';
+    const changeColorClass = isPositive ? 'text-green-600' : 'text-red-600';
+    
+    const changeIcon = isPositive ? 
+      `<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+      </svg>` : 
+      `<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+      </svg>`;
+    
+    const div = document.createElement('div');
+    div.className = `${gradientClass} rounded-lg p-2`;
+    div.innerHTML = `
+      <div class="text-sm font-bold ${textColorClass} mb-1">${segment.name}</div>
+      <div class="text-base font-bold mb-1">${segment.profit}</div>
+      <div class="flex items-center ${changeColorClass} text-xs">
+        ${changeIcon}
+        <span class="font-bold">${isPositive && !segment.changeValue.startsWith('+') ? '+' : ''}${segment.changeValue}%</span>
+      </div>
+      <p class="text-xs text-gray-600 mt-1">${segment.comment}</p>
+    `;
+    
+    container.appendChild(div);
+  });
+}
+
+// 箇条書きリストを更新する関数
+function updateBulletPoints(elementId, points) {
+  if (!points || !points.length) return;
+  
+  const container = document.getElementById(elementId);
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  points.forEach(point => {
+    const li = document.createElement('li');
+    li.textContent = `• ${point}`;
+    container.appendChild(li);
+  });
+}
+
+// データ構造のサンプル - 企業のデータを作成する際のテンプレート
+
+// ページ読み込み時にテンプレートデータを適用
+document.addEventListener('DOMContentLoaded', function() {
+  populateTemplate(templateData);
+});
+
+// データ構造のサンプル - 新しい企業のデータを作成する際のテンプレート
+const templateData = {
+  // 企業基本情報
+  companyName: '企業名',
+  companyInitials: 'XYZ', // 企業のイニシャルやシンボル
+  companyCode: '0000', // 証券コード
+  companyColor: '#336699', // 企業カラー（CSSカラーコード）
+  fiscalPeriod: '20XX年X月期 決算サマリー',
+  achievementBadge: '実績バッジ', // 例: 過去最高益、V字回復、等
+  achievementBadgeColor: 'bg-blue-600 text-white', // バッジの色
+  
+  // 評価バッジ
+  performanceRating: '7/10', // 業績評価
+  performanceRatingValue: 7, // 1-10の数値（7以上：高評価、4-6：中評価、1-3：低評価）
+  keyPointsRating: '評価: 8/10', // 決算ポイント評価
+  keyPointsRatingValue: 8,
+  nextFiscalRating: '評価: 6/10', // 来期予想評価
+  nextFiscalRatingValue: 6,
+  
+  // 評価テキスト
+  performanceEvaluation: '業績ハイライトの評価コメント', 
+  keyPointsEvaluation: '決算ポイントの評価コメント',
+  nextFiscalEvaluation: '来期予想の評価コメント',
+  
+  // 主要財務数値
+  netIncome: '000億円', // 当期純利益
+  eps: '000円', // EPS
+  dividend: '00円', // 配当
+  roe: '00.0%', // ROE
+  
+  // 変化率
+  netIncomeChange: '前年比 +00.0%', // 純利益変化率
+  epsChange: '前年比 +00.0%', // EPS変化率
+  dividendChange: '前年比 +00円', // 配当変化
+  roeChange: '+0.0pt', // ROE変化幅
+  
+  // 市場予想との比較
+  sales: '0兆0,000億円', // 売上高
+  salesForecast: '0兆0,000億円', // 売上高予想
+  salesVsForecast: '+0.0%', // 売上高予想比
+  operatingProfit: '0,000億円', // 営業利益
+  operatingProfitForecast: '0,000億円', // 営業利益予想
+  operatingProfitVsForecast: '+0.0%', // 営業利益予想比
+  netIncomeForecast: '0,000億円', // 純利益予想
+  netIncomeVsForecast: '+0.0%', // 純利益予想比
+  
+  // 決算ポイント
+  keyPoints: [
+    { isPositive: true, text: 'ポジティブな決算ポイント1' },
+    { isPositive: true, text: 'ポジティブな決算ポイント2' },
+    { isPositive: false, text: '注意すべき決算ポイント' }
+  ],
+  
+  // 来期予想
+  nextFiscalNetIncome: '0,000億円', // 来期純利益予想
+  nextFiscalDividend: '00円（00.0%）', // 来期配当予想
+  nextFiscalNetIncomeChange: '前年比 +0.0%', // 来期純利益変化率
+  nextFiscalDividendChange: '前期比 +0円', // 来期配当変化
+  nextFiscalHighlight: '来期のハイライトポイント', // 来期予想のハイライト
+  
+  // セグメント情報
+  segments: [
+    { name: 'セグメント1', profit: '000億円', changeValue: '0.0', comment: 'コメント' },
+    { name: 'セグメント2', profit: '000億円', changeValue: '0.0', comment: 'コメント' },
+    { name: 'セグメント3', profit: '000億円', changeValue: '-0.0', comment: 'コメント' },
+    { name: 'セグメント4', profit: '000億円', changeValue: '-0.0', comment: 'コメント' }
+  ],
+  
+  // 投資判断ポイント
+  positivePoints: [
+    'ポジティブ要素1',
+    'ポジティブ要素2',
+    'ポジティブ要素3'
+  ],
+  negativePoints: [
+    '注意すべき要素1',
+    '注意すべき要素2',
+    '注意すべき要素3'
+  ],
+  
+  // 財務状態
+  equityRatio: '00.0%', // 自己資本比率
+  operatingCashFlow: '0,000億円', // 営業キャッシュフロー
+  deRatio: '0.00倍', // D/Eレシオ
+  equityRatioChange: '+0.0pt', // 自己資本比率変化
+  operatingCashFlowChange: '+0.0%', // 営業CF変化率
+  deRatioChange: '改善または悪化', // D/Eレシオ変化
+  
+  // 総合評価
+  overallAssessment: '総合的な評価コメント。業績の要点、強み・弱み、今後の展望などを記載。',
+  
+  // データソース
+  dataSource: 'データソース: 企業名 20XX年X月期決算発表資料（20XX年XX月XX日公表）'
+};
+</script>
+</body>
+</html>
