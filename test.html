@@ -119,16 +119,6 @@
       display: block;
     }
 
-    /* 「前のページに戻る」ボタンを初期状態では非表示に */
-    #prevPage {
-      display: none;
-    }
-
-    /* ページ2がアクティブな時に「前のページに戻る」ボタンを表示 */
-    .page#page2.active ~ .text-center #prevPage {
-      display: inline-block;
-    }
-
     .company-logo {
       display: flex;
       align-items: center;
@@ -235,466 +225,520 @@
     .border-accent-danger {
       border-color: #ef4444;
     }
+
+    /* ページナビゲーションを常に表示 */
+    .page-navigation {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    /* 小さな画面向け調整 */
+    @media (max-width: 640px) {
+      .grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .grid-cols-3 {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+    }
+
+    /* スクリーンショット用の固定サイズ */
+    @media screen {
+      .screenshot-container {
+        max-width: 600px;
+        margin: 0 auto;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+      }
+    }
+
+    /* ページ番号表示 */
+    .page-number {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: var(--primary);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ページ1 -->
-    <div id="page1" class="page active">
-      <!-- ヘッダー -->
-      <div class="flex justify-between items-center mb-4">
-        <div class="flex items-center gap-3">
-          <div id="company-logo" class="company-logo bg-blue-600"></div>
-          <div>
-            <h1 id="company-name" class="text-xl font-bold text-blue-700">
-              <span id="company-code" class="text-gray-500 text-sm"></span>
-            </h1>
-            <p id="fiscal-period" class="text-xs text-gray-500"></p>
-          </div>
-        </div>
-        <div id="achievement-badge" class="badge bg-green-600 text-white"></div>
-      </div>
-
-      <!-- 総合評価サマリー -->
-      <div class="card p-3 mb-4 bg-blue-50 border-l-4 border-blue-600">
-        <div class="flex items-center">
-          <div id="overall-rating-display" class="text-2xl font-bold text-blue-800 mr-3"><span class="text-sm">/10</span></div>
-          <div>
-            <div id="overall-rating-text" class="font-bold text-blue-800">総合評価：</div>
-            <p id="overall-summary" class="text-sm"></p>
-          </div>
-        </div>
-        
-        <!-- 投資判断 -->
-        <div id="investment-recommendation" class="mt-2 p-2 bg-white rounded-md">
-          <div class="font-bold text-gray-800">投資判断：<span id="recommendation-text"></span> <span class="star-rating" id="star-rating"></span></div>
-          <p id="investment-reason" class="text-xs text-gray-600"></p>
-        </div>
-      </div>
-
-      <!-- 業績サマリー -->
-      <div class="card p-3 mb-4">
-        <div class="section-title text-base flex items-center">
-          業績ハイライト
-          <span id="performance-rating-badge" class="rating-badge rating-high text-xs">/10</span>
-        </div>
-        <div class="grid grid-cols-4 gap-2 mb-1">
-          <div>
-            <div class="text-xs text-gray-500">当期純利益</div>
-            <div id="net-income" class="text-sm font-bold"></div>
-            <div id="net-income-change" class="text-xs flex items-center text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-              前年比
-            </div>
-          </div>
-          <div>
-            <div class="text-xs text-gray-500">EPS</div>
-            <div id="eps" class="text-sm font-bold"></div>
-            <div id="eps-change" class="text-xs flex items-center text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-              前年比
-            </div>
-          </div>
-          <div>
-            <div class="text-xs text-gray-500">配当</div>
-            <div id="dividend" class="text-sm font-bold"></div>
-            <div id="dividend-change" class="text-xs flex items-center text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-              前年比
-            </div>
-          </div>
-          <div>
-            <div class="text-xs text-gray-500">ROE</div>
-            <div id="roe" class="text-sm font-bold"></div>
-            <div id="roe-change" class="text-xs flex items-center text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-              
-            </div>
-          </div>
-        </div>
-
-        <!-- 評価メーター -->
-        <div id="performance-rating-meter" class="rating-meter">
-          <div class="rating-meter-value bg-green-600" style="width: 90%"></div>
-        </div>
-        <div class="rating-legend">
-          <span>要注意（1-3点）</span>
-          <span>平均的（4-6点）</span>
-          <span>優秀（7-10点）</span>
-        </div>
-
-        <!-- 評価根拠 -->
-        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
-          <p class="font-bold mb-1">評価根拠：<span id="performance-rating-text">/10</span>（<span id="performance-rating-category"></span>）</p>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="performance-point-1"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="performance-point-2"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="performance-point-3"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 市場予想との比較 -->
-      <div class="card p-3 mb-4">
-        <div class="section-title text-base">市場予想との比較</div>
-        <div class="overflow-x-auto -mx-3">
-          <table class="w-full text-xs">
-            <thead class="bg-blue-50">
-              <tr>
-                <th class="py-2 px-3 text-left font-medium text-blue-800">指標</th>
-                <th class="py-2 px-3 text-left font-medium text-blue-800">実績</th>
-                <th class="py-2 px-3 text-left font-medium text-blue-800">予想</th>
-                <th class="py-2 px-3 text-left font-medium text-blue-800">予想比</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-gray-100">
-                <td class="py-2 px-3">売上高</td>
-                <td id="sales" class="py-2 px-3 font-bold"></td>
-                <td id="sales-forecast" class="py-2 px-3"></td>
-                <td id="sales-vs-forecast" class="py-2 px-3 text-green-600"></td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-2 px-3">営業利益</td>
-                <td id="operating-profit" class="py-2 px-3 font-bold"></td>
-                <td id="operating-profit-forecast" class="py-2 px-3"></td>
-                <td id="operating-profit-vs-forecast" class="py-2 px-3 text-green-600"></td>
-              </tr>
-              <tr>
-                <td class="py-2 px-3">当期純利益</td>
-                <td id="net-income-table" class="py-2 px-3 font-bold"></td>
-                <td id="net-income-forecast" class="py-2 px-3"></td>
-                <td id="net-income-vs-forecast" class="py-2 px-3 text-green-600"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- 評価コメント -->
-        <div class="mt-2 text-xs p-2 bg-blue-50 rounded">
-          <p class="font-bold">評価：<span id="forecast-comparison-rating">0</span>/10（<span id="forecast-comparison-category"></span>）</p>
-          <p id="forecast-comparison-comment"></p>
-          <div class="rating-meter mt-1">
-            <div id="forecast-comparison-meter" class="rating-meter-value bg-green-500" style="width: 80%"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 決算ポイント -->
-      <div class="card p-3 mb-4">
-        <div class="section-title text-base flex items-center">
-          決算ポイント
-          <span id="key-points-rating-badge" class="rating-badge rating-high">評価: /10</span>
-        </div>
-        <ul id="key-points" class="space-y-2 text-sm">
-          <!-- 動的に生成される決算ポイント -->
-        </ul>
-
-        <!-- 評価メーター -->
-        <div class="rating-meter mt-2">
-          <div id="key-points-meter" class="rating-meter-value bg-green-600" style="width: 80%"></div>
-        </div>
-
-        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
-          <p class="font-bold mb-1">評価根拠：<span id="key-points-rating-text">/10</span>（<span id="key-points-rating-category"></span>）</p>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="key-points-point-1"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="key-points-point-2"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-amber-500">△</span>
-            <span id="key-points-point-3"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 来期業績予想 -->
-      <div class="card p-3 mb-4">
-        <div class="section-title text-base flex items-center">
-          来期業績予想
-          <span id="next-fiscal-rating-badge" class="rating-badge rating-high">評価: /10</span>
-        </div>
-        <div class="bg-blue-50 rounded-lg p-3">
-          <div class="grid grid-cols-2 gap-3">
+  <div class="screenshot-container">
+    <div class="container relative">
+      <!-- ページ1: 全体サマリーと業績ハイライト -->
+      <div id="page1" class="page active">
+        <div class="page-number">1</div>
+        <!-- ヘッダー -->
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center gap-3">
+            <div id="company-logo" class="company-logo bg-blue-600"></div>
             <div>
-              <div class="text-xs text-gray-600 mb-1">当期純利益</div>
-              <div id="next-fiscal-net-income" class="text-base font-bold"></div>
-              <span id="next-fiscal-net-income-change" class="text-xs flex items-center text-green-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <h1 id="company-name" class="text-xl font-bold text-blue-700">
+                <span id="company-code" class="text-gray-500 text-sm"></span>
+              </h1>
+              <p id="fiscal-period" class="text-xs text-gray-500"></p>
+            </div>
+          </div>
+          <div id="achievement-badge" class="badge bg-green-600 text-white"></div>
+        </div>
+
+        <!-- 総合評価サマリー -->
+        <div class="card p-3 mb-4 bg-blue-50 border-l-4 border-blue-600">
+          <div class="flex items-center">
+            <div id="overall-rating-display" class="text-2xl font-bold text-blue-800 mr-3"><span class="text-sm">/10</span></div>
+            <div>
+              <div id="overall-rating-text" class="font-bold text-blue-800">総合評価：</div>
+              <p id="overall-summary" class="text-sm"></p>
+            </div>
+          </div>
+          
+          <!-- 投資判断 -->
+          <div id="investment-recommendation" class="mt-2 p-2 bg-white rounded-md">
+            <div class="font-bold text-gray-800">投資判断：<span id="recommendation-text"></span> <span class="star-rating" id="star-rating"></span></div>
+            <p id="investment-reason" class="text-xs text-gray-600"></p>
+          </div>
+
+          <div class="mb-3">
+            <h3 class="font-medium text-green-700 text-sm mb-2 border-accent border-accent-success">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              ポジティブ要素
+            </h3>
+            <ul id="positive-points" class="text-xs space-y-1 pl-5">
+              <!-- 動的に生成されるポジティブポイント -->
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-medium text-red-700 text-sm mb-2 border-accent border-accent-danger">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              注意すべき要素
+            </h3>
+            <ul id="negative-points" class="text-xs space-y-1 pl-5">
+              <!-- 動的に生成される注意点 -->
+            </ul>
+          </div>          
+        </div>
+
+        <!-- 決算ポイント -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base flex items-center">
+            決算ポイント
+            <span id="key-points-rating-badge" class="rating-badge rating-high">評価: /10</span>
+          </div>
+          <ul id="key-points" class="space-y-2 text-sm">
+            <!-- 動的に生成される決算ポイント -->
+          </ul>
+
+          <!-- 評価メーター -->
+          <div class="rating-meter mt-2">
+            <div id="key-points-meter" class="rating-meter-value bg-green-600" style="width: 80%"></div>
+          </div>
+
+          <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+            <p class="font-bold mb-1">評価根拠：<span id="key-points-rating-text">/10</span>（<span id="key-points-rating-category"></span>）</p>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="key-points-point-1"></span>
+            </div>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="key-points-point-2"></span>
+            </div>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-amber-500"></span>
+              <span id="key-points-point-3"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ページインジケータと切り替えボタン -->
+        <div class="page-indicator">
+          <div class="page-indicator-dot active"></div>
+          <div class="page-indicator-dot"></div>
+          <div class="page-indicator-dot"></div>
+        </div>
+        <div class="page-navigation">
+          <button class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md" onclick="goToPage(2)">
+            次のページ ▶
+          </button>
+        </div>
+      </div>
+      
+      <!-- ページ2: 決算ポイントと将来予測 -->
+      <div id="page2" class="page">
+        <div class="page-number">2</div>
+        <!-- ヘッダー -->
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center gap-3">
+            <div id="company-logo-page2" class="company-logo bg-blue-600"></div>
+            <div>
+              <h1 id="company-name-page2" class="text-xl font-bold text-blue-700">
+                <span id="company-code-page2" class="text-gray-500 text-sm"></span>
+              </h1>
+              <p id="fiscal-period-page2" class="text-xs text-gray-500"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 業績サマリー -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base flex items-center">
+            業績ハイライト
+            <span id="performance-rating-badge" class="rating-badge rating-high text-xs">/10</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2 mb-1">
+            <div>
+              <div class="text-xs text-gray-500">当期純利益</div>
+              <div id="net-income" class="text-sm font-bold"></div>
+              <div id="net-income-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
                 </svg>
                 前年比
-              </span>
+              </div>
             </div>
             <div>
-              <div class="text-xs text-gray-600 mb-1">配当（配当性向）</div>
-              <div id="next-fiscal-dividend" class="text-base font-bold"></div>
-              <span id="next-fiscal-dividend-change" class="text-xs flex items-center text-green-600">
+              <div class="text-xs text-gray-500">EPS</div>
+              <div id="eps" class="text-sm font-bold"></div>
+              <div id="eps-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                前年比
+              </div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500">配当</div>
+              <div id="dividend" class="text-sm font-bold"></div>
+              <div id="dividend-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                前年比
+              </div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-500">ROE</div>
+              <div id="roe" class="text-sm font-bold"></div>
+              <div id="roe-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-2 w-2 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                
+              </div>
+            </div>
+          </div>
+
+          <!-- 評価メーター -->
+          <div id="performance-rating-meter" class="rating-meter">
+            <div class="rating-meter-value bg-green-600" style="width: 90%"></div>
+          </div>
+          <div class="rating-legend">
+            <span>要注意（1-3点）</span>
+            <span>平均的（4-6点）</span>
+            <span>優秀（7-10点）</span>
+          </div>
+
+          <!-- 評価根拠 -->
+          <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+            <p class="font-bold mb-1">評価根拠：<span id="performance-rating-text">/10</span>（<span id="performance-rating-category"></span>）</p>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="performance-point-1"></span>
+            </div>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="performance-point-2"></span>
+            </div>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="performance-point-3"></span>
+            </div>
+          </div>
+        </div>
+        <!-- 市場予想との比較 -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base">市場予想との比較</div>
+          <div class="overflow-x-auto -mx-3">
+            <table class="w-full text-xs">
+              <thead class="bg-blue-50">
+                <tr>
+                  <th class="py-2 px-3 text-left font-medium text-blue-800">指標</th>
+                  <th class="py-2 px-3 text-left font-medium text-blue-800">実績</th>
+                  <th class="py-2 px-3 text-left font-medium text-blue-800">予想</th>
+                  <th class="py-2 px-3 text-left font-medium text-blue-800">予想比</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100">
+                  <td class="py-2 px-3">売上高</td>
+                  <td id="sales" class="py-2 px-3 font-bold"></td>
+                  <td id="sales-forecast" class="py-2 px-3"></td>
+                  <td id="sales-vs-forecast" class="py-2 px-3 text-green-600"></td>
+                </tr>
+                <tr class="border-b border-gray-100">
+                  <td class="py-2 px-3">営業利益</td>
+                  <td id="operating-profit" class="py-2 px-3 font-bold"></td>
+                  <td id="operating-profit-forecast" class="py-2 px-3"></td>
+                  <td id="operating-profit-vs-forecast" class="py-2 px-3 text-green-600"></td>
+                </tr>
+                <tr>
+                  <td class="py-2 px-3">当期純利益</td>
+                  <td id="net-income-table" class="py-2 px-3 font-bold"></td>
+                  <td id="net-income-forecast" class="py-2 px-3"></td>
+                  <td id="net-income-vs-forecast" class="py-2 px-3 text-green-600"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 評価コメント -->
+          <div class="mt-2 text-xs p-2 bg-blue-50 rounded">
+            <p class="font-bold">評価：<span id="forecast-comparison-rating">0</span>/10（<span id="forecast-comparison-category"></span>）</p>
+            <p id="forecast-comparison-comment"></p>
+            <div class="rating-meter mt-1">
+              <div id="forecast-comparison-meter" class="rating-meter-value bg-green-500" style="width: 80%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 来期業績予想 -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base flex items-center">
+            来期業績予想
+            <span id="next-fiscal-rating-badge" class="rating-badge rating-high">評価: /10</span>
+          </div>
+          <div class="bg-blue-50 rounded-lg p-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <div class="text-xs text-gray-600 mb-1">当期純利益</div>
+                <div id="next-fiscal-net-income" class="text-base font-bold"></div>
+                <span id="next-fiscal-net-income-change" class="text-xs flex items-center text-green-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                  </svg>
+                  前年比
+                </span>
+              </div>
+              <div>
+                <div class="text-xs text-gray-600 mb-1">配当（配当性向）</div>
+                <div id="next-fiscal-dividend" class="text-base font-bold"></div>
+                <span id="next-fiscal-dividend-change" class="text-xs flex items-center text-green-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                  </svg>
+                  
+                </span>
+              </div>
+            </div>
+            <div id="next-fiscal-highlight" class="mt-3 text-xs text-blue-700 font-medium text-center">
+              
+            </div>
+          </div>
+
+          <!-- 評価メーター -->
+          <div class="rating-meter mt-2">
+            <div id="next-fiscal-meter" class="rating-meter-value bg-green-600" style="width: 70%"></div>
+          </div>
+
+          <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+            <p class="font-bold mb-1">評価根拠：<span id="next-fiscal-rating-text">/10</span>（<span id="next-fiscal-rating-category"></span>）</p>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="next-fiscal-point-1"></span>
+            </div>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="next-fiscal-point-2"></span>
+            </div>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-amber-500"></span>
+              <span id="next-fiscal-point-3"></span>
+            </div>
+          </div>
+        </div>
+        <!-- ページインジケータと切り替えボタン -->
+        <div class="page-indicator">
+          <div class="page-indicator-dot"></div>
+          <div class="page-indicator-dot active"></div>
+          <div class="page-indicator-dot"></div>
+        </div>
+        <div class="page-navigation">
+          <button class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md" onclick="goToPage(1)">
+            ◀ 前のページ
+          </button>
+          <button class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md" onclick="goToPage(3)">
+            次のページ ▶
+          </button>
+        </div>
+      </div>
+
+      <!-- ページ3: 投資判断と財務情報 -->
+      <div id="page3" class="page">
+        <div class="page-number">3</div>
+        <!-- ヘッダー -->
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center gap-3">
+            <div id="company-logo-page3" class="company-logo bg-blue-600"></div>
+            <div>
+              <h1 id="company-name-page3" class="text-xl font-bold text-blue-700">
+                <span id="company-code-page3" class="text-gray-500 text-sm"></span>
+              </h1>
+              <p id="fiscal-period-page3" class="text-xs text-gray-500"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- セグメント別業績 -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base">セグメント別業績</div>
+          <div id="segments-container" class="grid grid-cols-2 gap-3">
+            <!-- 動的に生成されるセグメント -->
+          </div>
+        </div>
+
+        <!-- セグメント評価総括 -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base flex items-center">
+            セグメント評価
+            <span id="segment-rating-badge" class="rating-badge rating-high">評価: /10</span>
+          </div>
+          
+          <!-- 評価メーター -->
+          <div id="segment-rating-meter" class="rating-meter">
+            <div class="rating-meter-value bg-green-500" style="width: 80%"></div>
+          </div>
+          <div class="rating-legend">
+            <span>要注意（1-3点）</span>
+            <span>平均的（4-6点）</span>
+            <span>優秀（7-10点）</span>
+          </div>
+          
+          <!-- 評価根拠 -->
+          <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+            <p class="font-bold mb-1">評価根拠：<span id="segment-rating-text">/10</span>（<span id="segment-rating-category"></span>）</p>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="segment-point-1"></span>
+            </div>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="segment-point-2"></span>
+            </div>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-amber-500"></span>
+              <span id="segment-point-3"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 財務状態 -->
+        <div class="card p-3 mb-4">
+          <div class="section-title text-base flex items-center">
+            財務状態
+            <span id="financial-rating-badge" class="rating-badge rating-high">評価: /10</span>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mb-2">
+            <div>
+              <div class="text-xs text-gray-600 mb-1">自己資本比率</div>
+              <div id="equity-ratio" class="text-base font-bold"></div>
+              <div id="equity-ratio-change" class="text-xs flex items-center text-green-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
                 </svg>
                 
-              </span>
+              </div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-600 mb-1">営業CF</div>
+              <div id="operating-cash-flow" class="text-base font-bold"></div>
+              <div id="operating-cash-flow-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                
+              </div>
+            </div>
+            <div>
+              <div class="text-xs text-gray-600 mb-1">手元流動性</div>
+              <div id="liquid-assets" class="text-base font-bold"></div>
+              <div id="liquid-assets-change" class="text-xs flex items-center text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                </svg>
+                
+              </div>
             </div>
           </div>
-          <div id="next-fiscal-highlight" class="mt-3 text-xs text-blue-700 font-medium text-center">
-            
+          
+          <!-- 評価メーター -->
+          <div id="financial-rating-meter" class="rating-meter">
+            <div class="rating-meter-value bg-green-600" style="width: 90%"></div>
           </div>
-        </div>
-
-        <!-- 評価メーター -->
-        <div class="rating-meter mt-2">
-          <div id="next-fiscal-meter" class="rating-meter-value bg-green-600" style="width: 70%"></div>
-        </div>
-
-        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
-          <p class="font-bold mb-1">評価根拠：<span id="next-fiscal-rating-text">/10</span>（<span id="next-fiscal-rating-category"></span>）</p>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="next-fiscal-point-1"></span>
+          <div class="rating-legend">
+            <span>要注意（1-3点）</span>
+            <span>平均的（4-6点）</span>
+            <span>優秀（7-10点）</span>
           </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="next-fiscal-point-2"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-amber-500">△</span>
-            <span id="next-fiscal-point-3"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 評価スケールの説明 -->
-      <div class="card p-2 mb-4 bg-gray-50">
-        <p class="text-xs font-medium mb-1">評価スケール</p>
-        <div class="grid grid-cols-3 gap-1 text-xs">
-          <div><span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-1"></span>1-3: 要注意</div>
-          <div><span class="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-1"></span>4-6: 平均的</div>
-          <div><span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-1"></span>7-10: 良好-優秀</div>
-        </div>
-      </div>
-
-      <!-- ページ切り替えボタン -->
-      <div class="text-center">
-        <button id="nextPage" class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md">
-          詳細情報を見る ▶
-        </button>
-      </div>
-
-      <!-- ページインジケータ -->
-      <div class="page-indicator">
-        <div class="page-indicator-dot active"></div>
-        <div class="page-indicator-dot"></div>
-      </div>
-    </div>
-    
-    <!-- ページ2 -->
-    <div id="page2" class="page">
-      <!-- ヘッダー -->
-      <div class="flex justify-between items-center mb-4">
-        <div class="flex items-center gap-3">
-          <div id="company-logo-page2" class="company-logo bg-blue-600"></div>
-          <div>
-            <h1 id="company-name-page2" class="text-xl font-bold text-blue-700">
-              <span id="company-code-page2" class="text-gray-500 text-sm"></span>
-            </h1>
-            <p id="fiscal-period-page2" class="text-xs text-gray-500"></p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 標準化されたセグメント評価総括 -->
-      <div class="card p-3 mb-4">
-        <div class="section-title text-base flex items-center">
-          セグメント評価
-          <span id="segment-rating-badge" class="rating-badge rating-high">評価: /10</span>
-        </div>
-        
-        <!-- 評価メーター -->
-        <div id="segment-rating-meter" class="rating-meter">
-          <div class="rating-meter-value bg-green-500" style="width: 80%"></div>
-        </div>
-        <div class="rating-legend">
-          <span>要注意（1-3点）</span>
-          <span>平均的（4-6点）</span>
-          <span>優秀（7-10点）</span>
-        </div>
-        
-        <!-- 評価根拠 -->
-        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
-          <p class="font-bold mb-1">評価根拠：<span id="segment-rating-text">/10</span>（<span id="segment-rating-category"></span>）</p>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="segment-point-1"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="segment-point-2"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-amber-500">△</span>
-            <span id="segment-point-3"></span>
-          </div>
-        </div>
-      </div>
-
-      <!-- セグメント別業績 -->
-      <div class="card p-3 mb-4">
-        <div class="section-title text-base">セグメント別業績</div>
-        <div id="segments-container" class="grid grid-cols-2 gap-3">
-          <!-- 動的に生成されるセグメント -->
-        </div>
-      </div>
-
-      <!-- 投資判断ポイント -->
-      <div class="card p-3 mb-4">
-        <div class="section-title text-base">投資判断ポイント</div>
-        
-        <!-- 投資判断の明確化 -->
-        <div class="mb-3 border-l-4 border-green-500 pl-2">
-          <div class="investment-decision">
-            <span id="investment-decision-text"></span> <span class="star-rating" id="investment-stars"></span>
-          </div>
-          <p class="text-xs text-gray-700" id="investment-decision-reason"></p>
-        </div>
-        
-        <div class="mb-3">
-          <h3 class="font-medium text-green-700 text-sm mb-2 border-accent border-accent-success">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            ポジティブ要素
-          </h3>
-          <ul id="positive-points" class="text-xs space-y-1 pl-5">
-            <!-- 動的に生成されるポジティブポイント -->
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-medium text-red-700 text-sm mb-2 border-accent border-accent-danger">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            注意すべき要素
-          </h3>
-          <ul id="negative-points" class="text-xs space-y-1 pl-5">
-            <!-- 動的に生成される注意点 -->
-          </ul>
-        </div>
-      </div>
-
-      <!-- 財務状態 -->
-      <div class="card p-3 mb-4">
-        <div class="section-title text-base flex items-center">
-          財務状態
-          <span id="financial-rating-badge" class="rating-badge rating-high">評価: /10</span>
-        </div>
-        <div class="grid grid-cols-3 gap-3 mb-2">
-          <div>
-            <div class="text-xs text-gray-600 mb-1">自己資本比率</div>
-            <div id="equity-ratio" class="text-base font-bold"></div>
-            <div id="equity-ratio-change" class="text-xs flex items-center text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-              
+          
+          <!-- 財務状態の評価 -->
+          <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
+            <p class="font-bold mb-1">評価根拠：<span id="financial-rating-text">/10</span>（<span id="financial-rating-category"></span>）</p>
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="financial-point-1"></span>
             </div>
-          </div>
-          <div>
-            <div class="text-xs text-gray-600 mb-1">営業CF</div>
-            <div id="operating-cash-flow" class="text-base font-bold"></div>
-            <div id="operating-cash-flow-change" class="text-xs flex items-center text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-              
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="financial-point-2"></span>
             </div>
-          </div>
-          <div>
-            <div class="text-xs text-gray-600 mb-1">手元流動性</div>
-            <div id="liquid-assets" class="text-base font-bold"></div>
-            <div id="liquid-assets-change" class="text-xs flex items-center text-green-600">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-              </svg>
-              
+            <div class="evaluation-point">
+              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="financial-point-3"></span>
             </div>
           </div>
         </div>
-        
-        <!-- 評価メーター -->
-        <div id="financial-rating-meter" class="rating-meter">
-          <div class="rating-meter-value bg-green-600" style="width: 90%"></div>
-        </div>
-        <div class="rating-legend">
-          <span>要注意（1-3点）</span>
-          <span>平均的（4-6点）</span>
-          <span>優秀（7-10点）</span>
-        </div>
-        
-        <!-- 財務状態の評価 -->
-        <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
-          <p class="font-bold mb-1">評価根拠：<span id="financial-rating-text">/10</span>（<span id="financial-rating-category"></span>）</p>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="financial-point-1"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="financial-point-2"></span>
-          </div>
-          <div class="evaluation-point">
-            <span class="evaluation-point-icon text-green-600">◎</span>
-            <span id="financial-point-3"></span>
+
+        <!-- 評価スケールの説明 -->
+        <div class="card p-2 mb-4 bg-gray-50">
+          <p class="text-xs font-medium mb-1">評価スケール</p>
+          <div class="grid grid-cols-3 gap-1 text-xs">
+            <div><span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-1"></span>1-3: 要注意</div>
+            <div><span class="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-1"></span>4-6: 平均的</div>
+            <div><span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-1"></span>7-10: 良好-優秀</div>
           </div>
         </div>
-      </div>
 
-      <!-- フッター情報 -->
-      <div class="text-center text-xs text-gray-500 mt-4">
-        <p>※ 本資料は投資判断の参考となる情報の提供を目的としています</p>
-        <p id="data-source"></p>
-      </div>
-
-      <!-- 評価スケールの説明 -->
-      <div class="card p-2 mb-4 bg-gray-50">
-        <p class="text-xs font-medium mb-1">評価スケール</p>
-        <div class="grid grid-cols-3 gap-1 text-xs">
-          <div><span class="inline-block w-3 h-3 bg-red-500 rounded-full mr-1"></span>1-3: 要注意</div>
-          <div><span class="inline-block w-3 h-3 bg-yellow-500 rounded-full mr-1"></span>4-6: 平均的</div>
-          <div><span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-1"></span>7-10: 良好-優秀</div>
+        <!-- フッター情報 -->
+        <div class="text-center text-xs text-gray-500 mt-4">
+          <p>※ 本資料は投資判断の参考となる情報の提供を目的としています</p>
+          <p id="data-source"></p>
         </div>
-      </div>
 
-      <!-- ページ切り替えボタン -->
-      <div class="text-center mt-4">
-        <button id="prevPage" class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md">
-          ◀ 前のページに戻る
-        </button>
-      </div>
-
-      <!-- ページインジケータ -->
-      <div class="page-indicator">
-        <div class="page-indicator-dot"></div>
-        <div class="page-indicator-dot active"></div>
+        <!-- ページインジケータと切り替えボタン -->
+        <div class="page-indicator">
+          <div class="page-indicator-dot"></div>
+          <div class="page-indicator-dot"></div>
+          <div class="page-indicator-dot active"></div>
+        </div>
+        <div class="page-navigation">
+          <button class="bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md" onclick="goToPage(2)">
+            ◀ 前のページ
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -715,20 +759,38 @@ function setCompanyData(data) {
       element.innerHTML = html || '';
     }
   }
-  // 会社情報
-  document.getElementById('company-logo').textContent = data.companyAbbr || '';
-  document.getElementById('company-logo').style.backgroundColor = data.companyColor || '#1e40af';
-  document.getElementById('company-logo-page2').textContent = data.companyAbbr || '';
-  document.getElementById('company-logo-page2').style.backgroundColor = data.companyColor || '#1e40af';
-  document.getElementById('company-name').textContent = data.companyName || '';
-  document.getElementById('company-name-page2').textContent = data.companyName || '';
-  setElementText('company-code', data.companyCode ? `(${data.companyCode})` : '');
-  setElementText('company-code-page2', data.companyCode ? `(${data.companyCode})` : '');
-  document.getElementById('fiscal-period').textContent = data.fiscalPeriod || '';
-  document.getElementById('fiscal-period-page2').textContent = data.fiscalPeriod || '';
-  document.getElementById('achievement-badge').textContent = data.achievementBadge || '';
+  // 会社情報を全ページに共通して設定
+  function setCompanyInfoForAllPages() {
+    const pages = [1, 2, 3];
+    
+    pages.forEach(page => {
+      const logoElement = document.getElementById(page === 1 ? 'company-logo' : `company-logo-page${page}`);
+      if (logoElement) {
+        logoElement.textContent = data.companyAbbr || '';
+        logoElement.style.backgroundColor = data.companyColor || '#1e40af';
+      }
+      
+      const nameElement = document.getElementById(page === 1 ? 'company-name' : `company-name-page${page}`);
+      if (nameElement) {
+        nameElement.textContent = data.companyName || '';
+      }
+      
+      const codeElement = document.getElementById(page === 1 ? 'company-code' : `company-code-page${page}`);
+      if (codeElement) {
+        codeElement.textContent = data.companyCode ? `(${data.companyCode})` : '';
+      }
+      
+      const periodElement = document.getElementById(page === 1 ? 'fiscal-period' : `fiscal-period-page${page}`);
+      if (periodElement) {
+        periodElement.textContent = data.fiscalPeriod || '';
+      }
+    });
+  }
   
-  // 総合評価
+  setCompanyInfoForAllPages();
+  
+  // ページ1のデータを設定
+  document.getElementById('achievement-badge').textContent = data.achievementBadge || '';
   document.getElementById('overall-rating-display').textContent = data.overallRating;
   document.getElementById('overall-rating-text').textContent = `総合評価：${data.overallRatingText || ''}`;
   document.getElementById('overall-summary').textContent = data.overallSummary || '';
@@ -736,7 +798,6 @@ function setCompanyData(data) {
   document.getElementById('star-rating').textContent = data.starRating || '';
   document.getElementById('investment-reason').textContent = data.investmentReason || '';
   
-  // 業績ハイライト
   document.getElementById('performance-rating-badge').textContent = data.performanceRating ? `${data.performanceRating}/10` : '/10';
   document.getElementById('net-income').textContent = data.netIncome || '';
   document.getElementById('net-income-change').innerHTML = `
@@ -772,7 +833,6 @@ function setCompanyData(data) {
   document.getElementById('performance-point-2').textContent = data.performancePoint2 || '';
   document.getElementById('performance-point-3').textContent = data.performancePoint3 || '';
   
-  // 市場予想との比較
   document.getElementById('sales').textContent = data.sales || '';
   document.getElementById('sales-forecast').textContent = data.salesForecast || '';
   document.getElementById('sales-vs-forecast').textContent = data.salesVsForecast || '';
@@ -785,8 +845,8 @@ function setCompanyData(data) {
   document.getElementById('forecast-comparison-rating').textContent = data.forecastComparisonRating || '0';
   document.getElementById('forecast-comparison-category').textContent = data.forecastComparisonCategory || '';
   document.getElementById('forecast-comparison-comment').textContent = data.forecastComparisonComment || '';
-
-  // 決算ポイント
+  
+  // ページ2のデータを設定
   document.getElementById('key-points-rating-badge').textContent = `評価: ${data.keyPointsRating || ''}/10`;
   const keyPointsContainer = document.getElementById('key-points');
   keyPointsContainer.innerHTML = ''; // 既存のポイントをクリア
@@ -829,30 +889,6 @@ function setCompanyData(data) {
   document.getElementById('key-points-point-2').textContent = data.keyPointsPoint2 || '';
   document.getElementById('key-points-point-3').textContent = data.keyPointsPoint3 || '';
   
-  // 来期業績予想
-  document.getElementById('next-fiscal-rating-badge').textContent = `評価: ${data.nextFiscalRating || ''}/10`;
-  document.getElementById('next-fiscal-net-income').textContent = data.nextFiscalNetIncome || '';
-  document.getElementById('next-fiscal-net-income-change').innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-    </svg>
-    前年比 ${data.nextFiscalNetIncomeChange || ''}
-  `;
-  document.getElementById('next-fiscal-dividend').textContent = data.nextFiscalDividend || '';
-  document.getElementById('next-fiscal-dividend-change').innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-    </svg>
-    ${data.nextFiscalDividendChange || ''}
-  `;
-  document.getElementById('next-fiscal-highlight').textContent = data.nextFiscalHighlight || '';
-  document.getElementById('next-fiscal-rating-text').textContent = data.nextFiscalRating ? `${data.nextFiscalRating}/10` : '/10';
-  document.getElementById('next-fiscal-rating-category').textContent = data.nextFiscalRatingCategory || '';
-  document.getElementById('next-fiscal-point-1').textContent = data.nextFiscalPoint1 || '';
-  document.getElementById('next-fiscal-point-2').textContent = data.nextFiscalPoint2 || '';
-  document.getElementById('next-fiscal-point-3').textContent = data.nextFiscalPoint3 || '';
-  
-  // セグメント評価
   document.getElementById('segment-rating-badge').textContent = `評価: ${data.segmentRating || ''}/10`;
   document.getElementById('segment-rating-text').textContent = data.segmentRating ? `${data.segmentRating}/10` : '/10';
   document.getElementById('segment-rating-category').textContent = data.segmentRatingCategory || '';
@@ -860,7 +896,6 @@ function setCompanyData(data) {
   document.getElementById('segment-point-2').textContent = data.segmentPoint2 || '';
   document.getElementById('segment-point-3').textContent = data.segmentPoint3 || '';
   
-  // セグメント別業績
   const segmentsContainer = document.getElementById('segments-container');
   segmentsContainer.innerHTML = ''; // 既存のセグメントをクリア
   
@@ -914,10 +949,32 @@ function setCompanyData(data) {
     });
   }
   
-  // 投資判断ポイント
-  document.getElementById('investment-decision-text').textContent = data.investmentDecisionText || '';
-  document.getElementById('investment-stars').textContent = data.investmentStars || '';
-  document.getElementById('investment-decision-reason').textContent = data.investmentDecisionReason || '';
+  document.getElementById('next-fiscal-rating-badge').textContent = `評価: ${data.nextFiscalRating || ''}/10`;
+  document.getElementById('next-fiscal-net-income').textContent = data.nextFiscalNetIncome || '';
+  document.getElementById('next-fiscal-net-income-change').innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+    前年比 ${data.nextFiscalNetIncomeChange || ''}
+  `;
+  document.getElementById('next-fiscal-dividend').textContent = data.nextFiscalDividend || '';
+  document.getElementById('next-fiscal-dividend-change').innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+    ${data.nextFiscalDividendChange || ''}
+  `;
+  document.getElementById('next-fiscal-highlight').textContent = data.nextFiscalHighlight || '';
+  document.getElementById('next-fiscal-rating-text').textContent = data.nextFiscalRating ? `${data.nextFiscalRating}/10` : '/10';
+  document.getElementById('next-fiscal-rating-category').textContent = data.nextFiscalRatingCategory || '';
+  document.getElementById('next-fiscal-point-1').textContent = data.nextFiscalPoint1 || '';
+  document.getElementById('next-fiscal-point-2').textContent = data.nextFiscalPoint2 || '';
+  document.getElementById('next-fiscal-point-3').textContent = data.nextFiscalPoint3 || '';
+  
+  // // ページ3のデータを設定
+  // document.getElementById('investment-decision-text').textContent = data.investmentDecisionText || '';
+  // document.getElementById('investment-stars').textContent = data.investmentStars || '';
+  // document.getElementById('investment-decision-reason').textContent = data.investmentDecisionReason || '';
   
   const positivePointsContainer = document.getElementById('positive-points');
   positivePointsContainer.innerHTML = ''; // 既存のポイントをクリア
@@ -943,7 +1000,6 @@ function setCompanyData(data) {
     });
   }
   
-  // 財務状態
   document.getElementById('financial-rating-badge').textContent = `評価: ${data.financialRating || ''}/10`;
   document.getElementById('equity-ratio').textContent = data.equityRatio || '';
   document.getElementById('equity-ratio-change').innerHTML = `
@@ -972,7 +1028,6 @@ function setCompanyData(data) {
   document.getElementById('financial-point-2').textContent = data.financialPoint2 || '';
   document.getElementById('financial-point-3').textContent = data.financialPoint3 || '';
   
-  // データソース
   document.getElementById('data-source').textContent = data.dataSource || '';
   
   // 評価メーターの更新
@@ -985,37 +1040,22 @@ function setCompanyData(data) {
 }
 
 // ページ切り替え機能
-function updatePageNavigation() {
-  const page1 = document.getElementById('page1');
-  const page2 = document.getElementById('page2');
-  const nextPage = document.getElementById('nextPage');
-  const prevPage = document.getElementById('prevPage');
-  const dot1 = document.querySelector('.page-indicator-dot:nth-child(1)');
-  const dot2 = document.querySelector('.page-indicator-dot:nth-child(2)');
-
-  // 初期状態では「前のページに戻る」ボタンを非表示
-  prevPage.style.display = 'none';
-
-  nextPage.addEventListener('click', function() {
-    page1.classList.remove('active');
-    page2.classList.add('active');
-    dot1.classList.remove('active');
-    dot2.classList.add('active');
-    // ページ2に移動したら「前のページに戻る」ボタンを表示
-    prevPage.style.display = 'inline-block';
-    // ページ2に移動したら「詳細情報を見る」ボタンを非表示
-    nextPage.style.display = 'none';
+function goToPage(pageNumber) {
+  // すべてのページを非表示にする
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.remove('active');
   });
-
-  prevPage.addEventListener('click', function() {
-    page2.classList.remove('active');
-    page1.classList.add('active');
-    dot2.classList.remove('active');
-    dot1.classList.add('active');
-    // ページ1に戻ったら「前のページに戻る」ボタンを非表示
-    prevPage.style.display = 'none';
-    // ページ1に戻ったら「詳細情報を見る」ボタンを表示
-    nextPage.style.display = 'inline-block';
+  
+  // 選択したページを表示する
+  document.getElementById(`page${pageNumber}`).classList.add('active');
+  
+  // ページインジケーターを更新
+  document.querySelectorAll('.page-indicator-dot').forEach((dot, index) => {
+    if (index === pageNumber - 1) {
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
   });
 }
 
@@ -1040,134 +1080,133 @@ function updateRatingMeter(meterId, ratingValue) {
   }
 }
 
-const companyData = {
+const sampleCompanyData = {
   // 会社情報
-  companyAbbr: "JR",
-  companyColor: "#1E40AF", // JR東日本のコーポレートカラー (緑)
-  companyName: "東日本旅客鉄道株式会社",
-  companyCode: "9020",
-  fiscalPeriod: "2025年3月期 決算サマリー",
-  achievementBadge: "4期連続増収",
+  companyAbbr: 'JRE',
+  companyColor: '#007745', // JR東日本の企業カラー（グリーン）
+  companyName: '東日本旅客鉄道株式会社',
+  companyCode: '9020',
+  fiscalPeriod: '2025年3月期 決算サマリー',
+  achievementBadge: '4期連続増収達成',
   
   // 総合評価
-  overallRating: "7.5",
-  overallRatingText: "良好（7-8点）",
-  overallSummary: "鉄道利用の回復とエキナカ店舗の売上増により4期連続の増収増益を達成。全セグメントで増収増益を実現し、親会社株主に帰属する当期純利益は前期比14.2%増の2,242億円と好調。ただし、インバウンド需要の取り込み強化や運賃改定など将来の課題も残る。",
-  recommendationText: "買い推奨",
-  starRating: "★★★★☆",
-  investmentReason: "継続的な増収増益と高水準の株主還元、インバウンド需要の更なる取り込みによる成長余地などから買い推奨。鉄道事業の回復は着実に進んでおり、不動産・ホテル事業の成長も期待できる。",
+  overallRating: '7.0',
+  overallRatingText: '良好（7点）',
+  overallSummary: '鉄道利用の回復とエキナカ店舗の売上増で全セグメントが増収増益。特に北陸新幹線敦賀延伸効果やインバウンド需要の復活が業績を押し上げ。ただし、有利子負債の高水準や次期の伸び率鈍化に注意。',
+  recommendationText: '弱気買い',
+  starRating: '★★★☆☆',
+  investmentReason: '業績は4期連続増収で回復基調が鮮明だが、次期見通しでは利益伸び率が鈍化。株主還元強化は評価できるものの、多額の有利子負債と中長期的な鉄道利用減少リスクを考慮すると、積極的な投資推奨は控える。',
   
   // 業績ハイライト
-  performanceRating: "8",
-  netIncome: "2,242億円",
-  netIncomeChange: "+14.2%",
-  eps: "198.29円",
-  epsChange: "+14.1%",
-  dividend: "60円",
-  dividendChange: "+20円",
-  roe: "8.0%",
-  roeChange: "+0.4pt",
-  performanceRatingCategory: "良好",
-  performancePoint1: "全事業セグメントで増収増益を達成し、連結営業収益は前期比5.8%増の2兆8,875億円",
-  performancePoint2: "親会社株主に帰属する当期純利益は前期比14.2%増の2,242億円と大幅増益",
-  performancePoint3: "配当は年間60円（前期は42円相当）と大幅増配し、配当性向は30.3%に向上",
+  performanceRating: '8',
+  netIncome: '2,242億円',
+  netIncomeChange: '+14.2%',
+  eps: '198.29円',
+  epsChange: '+14.2%',
+  dividend: '60円',
+  dividendChange: '+15.4%',
+  roe: '8.0%',
+  roeChange: '+0.4pt',
+  performanceRatingCategory: '優秀',
+  performancePoint1: '親会社株主に帰属する当期純利益は2,242億円（前期比+14.2%）と大幅増益を達成',
+  performancePoint2: 'ROEは8.0%（+0.4pt）と資本効率が向上し、1株当たり配当も60円（+8円）へ増配',
+  performancePoint3: '全てのセグメントで増収増益を達成し、特に流通・サービス事業は営業利益15.0%増と好調',
   
   // 市場予想との比較
-  sales: "2兆8,875億円",
-  salesForecast: "2兆8,520億円",
-  salesVsForecast: "+1.2%",
-  operatingProfit: "3,767億円",
-  operatingProfitForecast: "3,700億円",
-  operatingProfitVsForecast: "+1.8%",
-  netIncomeForecast: "2,100億円",
-  netIncomeVsForecast: "+6.8%",
-  forecastComparisonRating: "7",
-  forecastComparisonCategory: "良好",
-  forecastComparisonComment: "全ての主要指標で市場予想を上回る堅調な決算。特に当期純利益は予想を6.8%上回り、収益力の高さを示した。",
+  sales: '28,875億円',
+  salesForecast: '28,520億円',
+  salesVsForecast: '+1.2%',
+  operatingProfit: '3,767億円',
+  operatingProfitForecast: '3,700億円',
+  operatingProfitVsForecast: '+1.8%',
+  netIncomeForecast: '2,100億円',
+  netIncomeVsForecast: '+6.8%',
+  forecastComparisonRating: '7',
+  forecastComparisonCategory: '良好',
+  forecastComparisonComment: '全ての主要指標で会社計画を上回る結果。特に当期純利益は予想を6.8%上回り、事業環境の改善が顕著。ただし、上方修正のハードルが高くなる点には留意。',
 
   // 決算ポイント
-  keyPointsRating: "7",
+  keyPointsRating: '7',
   keyPoints: [
-    { positive: true, text: "インバウンド需要の増加により、四半期累計で428億円の関連収入（前年比+52.5%）を創出" },
-    { positive: true, text: "運輸事業では新幹線利用増や北陸新幹線敦賀延伸効果により増収（+5.1%）" },
-    { positive: false, text: "コスト増加が顕著であり、JR修繕費が前期比+425億円と大幅増加" }
+    { positive: true, text: '鉄道のご利用増加によって運輸事業が売上高5.1%増、営業利益8.8%増の増収増益達成' },
+    { positive: true, text: '北陸新幹線敦賀延伸開業効果によって新幹線営業収入が前年比8.7%増加' },
+    { positive: true, text: 'エキナカ店舗の売上増により流通・サービス事業が大幅増益（営業利益+15.0%）' },
+    { positive: false, text: '修繕費の増加（約425億円増）など費用増加の影響もあり、利益率改善は限定的' }
   ],
-  keyPointsRatingCategory: "良好",
-  keyPointsPoint1: "コロナ前の水準までの回復に加え、インバウンド需要の取り込みが好調で収益拡大に貢献",
-  keyPointsPoint2: "新幹線のご利用増が売上を牽引し、特に北陸新幹線敦賀延伸効果が顕著",
-  keyPointsPoint3: "人件費増（+200億円）や修繕費増（+425億円）などコスト増加が利益を圧迫する要因となっている",
+  keyPointsRatingCategory: '良好',
+  keyPointsPoint1: '鉄道利用の回復により収益基盤が強化され、コロナ禍前の水準への回復が進行',
+  keyPointsPoint2: '北陸新幹線敦賀延伸効果とインバウンド需要回復が収益の押し上げ要因として顕在化',
+  keyPointsPoint3: '人件費増加（約200億円）や修繕費増加（約425億円）の費用圧迫要因をカバーできたが、利益率改善には限界あり',
   
   // 来期業績予想
-  nextFiscalRating: "7",
-  nextFiscalNetIncome: "2,270億円",
-  nextFiscalNetIncomeChange: "+1.2%",
-  nextFiscalDividend: "62円（30.9%）",
-  nextFiscalDividendChange: "+2円",
-  nextFiscalHighlight: "過去最高の連結営業収益を目指す",
-  nextFiscalRatingCategory: "良好",
-  nextFiscalPoint1: "来期連結営業収益は3兆230億円（+4.7%）と過去最高を見込む",
-  nextFiscalPoint2: "親会社株主に帰属する当期純利益は2,270億円（+1.2%）と増益計画",
-  nextFiscalPoint3: "米国の関税政策など世界経済の先行き不透明感による影響が懸念材料",
+  nextFiscalRating: '6',
+  nextFiscalNetIncome: '2,270億円',
+  nextFiscalNetIncomeChange: '+1.2%',
+  nextFiscalDividend: '62円（30.9%）',
+  nextFiscalDividendChange: '+2円',
+  nextFiscalHighlight: 'TAKANAWA GATEWAY CITYの開業効果に期待',
+  nextFiscalRatingCategory: '平均的',
+  nextFiscalPoint1: '当期純利益2,270億円予想は増益ながら伸び率が+1.2%と大幅鈍化',
+  nextFiscalPoint2: '営業利益は3,870億円（+2.7%）、経常利益は3,230億円（+0.4%）と利益伸び率が低調',
+  nextFiscalPoint3: '配当は62円（+2円）と増配を継続し、株主還元を強化するものの増配幅は縮小',
   
   // セグメント評価
-  segmentRating: "8",
-  segmentRatingCategory: "良好",
-  segmentPoint1: "運輸事業は鉄道運輸収入の増加により、増収増益を達成（売上高+5.1%、営業利益+8.8%）",
-  segmentPoint2: "流通・サービス事業はエキナカ店舗の売上増により、大幅増益（売上高+6.6%、営業利益+15.0%）",
-  segmentPoint3: "不動産・ホテル事業はSC・ホテル売上増で増収増益（売上高+6.5%、営業利益+9.0%）",
+  segmentRating: '8',
+  segmentRatingCategory: '優秀',
+  segmentPoint1: '運輸事業は鉄道利用回復により増収増益、特に新幹線の伸びが顕著（北陸新幹線効果）',
+  segmentPoint2: '流通・サービス事業は営業利益15.0%増と大幅増益、エキナカ店舗が好調',
+  segmentPoint3: '不動産・ホテル事業もSC・ホテルの売上増で堅調だが、今後の不動産市況変動リスクに注意',
   
   // セグメント別業績
   segments: [
-    { name: '運輸事業', value: '1,760億円', change: '+8.8%', description: '鉄道運輸収入増加', profit: true },
-    { name: '流通・サービス事業', value: '605億円', change: '+15.0%', description: 'エキナカ店舗売上増', profit: true },
-    { name: '不動産・ホテル事業', value: '1,203億円', change: '+9.0%', description: 'SC・ホテル売上増', profit: true },
+    { name: '運輸事業', value: '1,760億円', change: '+8.8%', description: '鉄道利用回復・北陸新幹線効果', profit: true },
+    { name: '流通・サービス', value: '605億円', change: '+15.0%', description: 'エキナカ店舗売上増', profit: true },
+    { name: '不動産・ホテル', value: '1,203億円', change: '+9.0%', description: 'SC・ホテル売上好調', profit: true },
     { name: 'その他', value: '229億円', change: '+4.7%', description: 'システム受託開発増', profit: true }
   ],
   
   // 投資判断ポイント
-  investmentDecisionText: "買い推奨",
-  investmentStars: "★★★★☆",
-  investmentDecisionReason: "鉄道事業の堅調な回復とインバウンド需要の取り込み、全セグメントでの増収増益など好調な業績を評価。配当性向30.3%と株主還元強化も評価材料。「TAKANAWA GATEWAY CITY」などの不動産開発プロジェクトも中長期の成長ドライバーとなる見込み。",
+  investmentDecisionText: '弱気買い',
+  investmentStars: '★★★☆☆',
+  investmentDecisionReason: '鉄道利用の回復やエキナカ店舗の好調により業績は順調に回復し、株主還元強化の姿勢も評価できるが、多額の有利子負債や次期の利益伸び率鈍化、少子高齢化による中長期的な鉄道利用減少リスクを考慮すると、積極的な買い推奨は見送る。選別投資の対象として慎重に判断すべき。',
   
   // ポジティブ要素と注意点
   positivePoints: [
-    "全セグメントでの増収増益達成",
-    "インバウンド需要の取り込みによる収益増（428億円、前年比+52.5%）",
-    "株主還元強化（配当60円、配当性向30.3%）",
-    "自己資本比率の向上（28.1%、+0.3pt）",
-    "「TAKANAWA GATEWAY CITY」などの不動産開発の進展"
+    '4期連続の増収で全セグメントが増収増益達成',
+    '北陸新幹線敦賀延伸効果による新幹線収入増加',
+    'インバウンド需要の復活による収益押し上げ',
+    '配当増額（60円、+8円）による株主還元強化',
+    'TAKANAWA GATEWAY CITYなど不動産開発の進展'
   ],
   negativePoints: [
-    "コスト増加（人件費+200億円、修繕費+425億円）による利益圧迫",
-    "営業活動によるCFからネットの設備投資を差し引いたフリーCFはマイナス511億円と悪化",
-    "世界経済の先行き不透明感（米国の関税政策など）",
-    "少子高齢化に伴う国内市場の縮小リスク",
-    "運賃改定の認可取得の不確実性"
+    '次期見通しでは利益伸び率が大幅に鈍化（当期純利益+1.2%）',
+    'ネット有利子負債残高が4兆7,218億円と高水準',
+    '修繕費や人件費増加による利益圧迫要因の存在',
+    '少子高齢化による中長期的な鉄道利用減少リスク',
+    '運賃改定申請に対する社会的反発リスク'
   ],
   
   // 財務状態
-  financialRating: "7",
-  equityRatio: "28.1%",
-  equityRatioChange: "+0.3pt",
-  operatingCashFlow: "7,322億円",
-  operatingCashFlowChange: "+6.4%",
-  liquidAssets: "2,334億円",
-  liquidAssetsChange: "-16.9%",
-  financialRatingCategory: "良好",
-  financialPoint1: "自己資本比率は28.1%（+0.3pt）と若干改善しているが、同業他社比では低水準",
-  financialPoint2: "営業CFは7,322億円（+6.4%）と増加したが、投資CFの流出が増加(-13.4%)しフリーCFはマイナス511億円に悪化",
-  financialPoint3: "ネット有利子負債残高は4兆7,218億円（+2.9%）と増加、ネット有利子負債/EBITDA倍率は6.0倍（-0.2倍）",
+  financialRating: '5',
+  equityRatio: '28.1%',
+  equityRatioChange: '+0.3pt',
+  operatingCashFlow: '7,322億円',
+  operatingCashFlowChange: '+6.4%',
+  liquidAssets: '2,334億円',
+  liquidAssetsChange: '-16.8%',
+  financialRatingCategory: '平均的',
+  financialPoint1: '自己資本比率28.1%は若干改善したが、依然として低水準',
+  financialPoint2: '営業CFは7,322億円（+6.4%）と安定したキャッシュ創出力あり',
+  financialPoint3: 'ネット有利子負債残高4兆7,218億円（EBITDA倍率6.0倍）と高水準の有利子負債が財務負担に',
   
   // データソース
-  dataSource: "東日本旅客鉄道株式会社 2025年3月期決算短信・決算説明会資料（2025年4月30日公表）"
+  dataSource: '東日本旅客鉄道株式会社 2025年3月期決算発表資料（2025年4月30日公表）'
 };
 
 // ページ読み込み時に初期化
 document.addEventListener('DOMContentLoaded', function() {
-  updatePageNavigation();
-  
-  // サンプルデータをセット（実際の利用時はこの行を削除し、実データを使用）
-  setCompanyData(companyData);
+  // サンプルデータをセット
+  setCompanyData(sampleCompanyData);
 });
 </script>
 </body>
