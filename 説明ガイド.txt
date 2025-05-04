@@ -1,0 +1,142 @@
+# 企業決算サマリーテンプレート - 説明ガイド
+
+このドキュメントは、企業決算サマリーのHTML/CSSテンプレートの使用方法と各項目に入力すべきデータについて説明します。テンプレートは2ページ構成で、主要な財務指標と詳細情報を視覚的に表示できます。
+
+## テンプレートの概要
+
+このテンプレートは以下の要素で構成されています：
+- 会社情報ヘッダー
+- 総合評価サマリー
+- 業績ハイライト
+- 市場予想との比較
+- 決算ポイント
+- 来期業績予想
+- セグメント評価
+- 投資判断ポイント
+- 財務状態
+
+各セクションには10点満点の評価システムが設けられており、視覚的な評価メーターで表示されます（1-3点：要注意、4-6点：平均的、7-10点：良好-優秀）。
+
+## 各セクションの入力項目ガイド
+
+### 1. 会社情報ヘッダー
+- `company-logo`：会社の略称（3文字程度、例：TYT）
+- `company-name`：会社の正式名称（例：トヨタ自動車）
+- `company-code`：証券コード（例：7203）
+- `fiscal-period`：決算期（例：2025年3月期 決算サマリー）
+- `achievement-badge`：業績の特筆すべき成果（例：過去最高益達成）
+
+### 2. 総合評価サマリー
+- `overall-rating-display`：総合評価点数（例：8.5/10）
+- `overall-rating-text`：総合評価の表現（例：優秀（7-9点））
+- `overall-summary`：決算の総括（150字程度）
+- `recommendation-text`：投資判断（例：買い推奨、中立、売り推奨）
+- `star-rating`：投資判断の強さを星で表示（★～★★★★★）
+- `investment-reason`：投資判断の理由（100字程度）
+
+### 3. 業績ハイライト
+- `performance-rating-badge`：業績評価点数（例：9/10）
+- `net-income`：当期純利益（例：4兆2,680億円）
+- `net-income-change`：前年比増減率（例：+18.5%）
+- `eps`：1株当たり利益（例：312.8円）
+- `eps-change`：前年比増減率（例：+22.7%）
+- `dividend`：1株当たり配当金（例：62円）
+- `dividend-change`：前年比増減率（例：+24%）
+- `roe`：自己資本利益率（例：14.8%）
+- `roe-change`：前年比増減ポイント（例：+2.3pt）
+- `performance-rating-text`：業績評価の表現（例：9/10）
+- `performance-rating-category`：評価カテゴリー（例：極めて優秀）
+- `performance-point-1~3`：評価ポイント3点（各50-80字程度）
+
+### 4. 市場予想との比較
+- `sales`：売上高実績（例：42兆1,986億円）
+- `sales-forecast`：売上高予想（例：41兆5,000億円）
+- `sales-vs-forecast`：予想比（例：+1.7%）
+- `operating-profit`：営業利益実績（例：5兆2,341億円）
+- `operating-profit-forecast`：営業利益予想（例：4兆8,000億円）
+- `operating-profit-vs-forecast`：予想比（例：+9.0%）
+- `net-income-table`：当期純利益実績（例：4兆2,680億円）
+- `net-income-forecast`：当期純利益予想（例：3兆9,500億円）
+- `net-income-vs-forecast`：予想比（例：+8.1%）
+
+### 5. 決算ポイント
+- `key-points-rating-badge`：評価点数（例：8/10）
+- `key-points`：主な決算ポイント（肯定的・否定的な要素を含む3-5点）
+- `key-points-rating-text`：評価の表現（例：8/10）
+- `key-points-rating-category`：評価カテゴリー（例：優秀）
+- `key-points-point-1~3`：評価ポイント3点（各50-80字程度）
+
+### 6. 来期業績予想
+- `next-fiscal-rating-badge`：評価点数（例：7/10）
+- `next-fiscal-net-income`：来期純利益予想（例：4兆5,000億円）
+- `next-fiscal-net-income-change`：前年比増減率（例：+5.4%）
+- `next-fiscal-dividend`：来期配当予想（例：68円（19.8%））
+- `next-fiscal-dividend-change`：増減額（例：+6円）
+- `next-fiscal-highlight`：来期の注目ポイント（例：2期連続過去最高益更新を目指す）
+- `next-fiscal-rating-text`：評価の表現（例：7/10）
+- `next-fiscal-rating-category`：評価カテゴリー（例：良好）
+- `next-fiscal-point-1~3`：評価ポイント3点（各50-80字程度）
+
+### 7. セグメント評価（ページ2）
+- `segment-rating-badge`：評価点数（例：8/10）
+- `segment-rating-text`：評価の表現（例：8/10）
+- `segment-rating-category`：評価カテゴリー（例：優秀）
+- `segment-point-1~3`：評価ポイント3点（各50-80字程度）
+- セグメント別データ（自動車、金融、EV専業部門、その他）：
+  - 各セグメントの利益/損失（例：4兆1,860億円）
+  - 前年比増減率（例：+21.5%）
+  - 簡潔な説明（例：北米SUV販売好調）
+
+### 8. 投資判断ポイント（ページ2）
+- `investment-decision-text`：投資判断（例：買い推奨）
+- `investment-stars`：投資判断の強さ（例：★★★★☆）
+- `investment-decision-reason`：投資判断の詳細な理由（150字程度）
+- `positive-points`：ポジティブ要素（5点程度）
+- `negative-points`：注意すべき要素（4点程度）
+
+### 9. 財務状態（ページ2）
+- `financial-rating-badge`：評価点数（例：9/10）
+- `equity-ratio`：自己資本比率（例：44.8%）
+- `equity-ratio-change`：前年比増減ポイント（例：+1.2pt）
+- `operating-cash-flow`：営業キャッシュフロー（例：5兆2,150億円）
+- `operating-cash-flow-change`：前年比増減率（例：+15.3%）
+- `de-ratio`：手元流動性（例：6兆3,840億円）
+- `de-ratio-change`：前年比増減率（例：+8.5%）
+- `financial-rating-text`：評価の表現（例：9/10）
+- `financial-rating-category`：評価カテゴリー（例：極めて優秀）
+- `financial-point-1~3`：評価ポイント3点（各50-80字程度）
+
+### 10. フッター情報
+- `data-source`：データソース（例：トヨタ自動車 2025年3月期決算発表資料（2025年5月1日公表））
+
+## 評価システムについて
+
+評価は10点満点で、以下のカテゴリーに分類されます：
+- 1-3点：要注意（赤色）
+- 4-6点：平均的（黄色）
+- 7-10点：良好-優秀（緑色）
+
+各評価セクションでは、点数に応じて自動的に評価メーターの幅と色が変更されます。
+
+## テンプレートのカスタマイズ
+
+各企業の特性に合わせて、以下の要素をカスタマイズすることができます：
+1. 企業ロゴの背景色
+2. 表示する財務指標（業種によってROEの代わりにROA等）
+3. セグメント構成（業種特有のセグメントに変更）
+4. 評価カテゴリーと点数基準
+
+## JavaScript関数
+
+テンプレートには以下のJavaScript関数が含まれています：
+- `updatePageNavigation()`：ページ切り替え機能
+- `updateRatingMeter(meterId, ratingValue)`：評価メーターの更新
+
+これらの関数を活用して、動的にコンテンツを更新することができます。
+
+## テンプレート使用のポイント
+
+1. 各項目のID値を正確に設定し、JavaScriptで値を更新
+2. 評価点数に応じたメーターの自動調整を活用
+3. 複数ページの構成を活かし、概要と詳細情報を適切に分割
+4. 色分けを使って、良好・注意すべき要素を視覚的に区別
