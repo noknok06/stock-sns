@@ -1,6 +1,6 @@
-# 企業決算サマリーテンプレート - 説明ガイド（改訂版）
+# 企業決算サマリーテンプレート - 説明ガイド（厳格評価版）
 
-このドキュメントは、3ページ構成に拡張された企業決算サマリーのHTML/CSSテンプレートの使用方法と各項目の入力データについて説明します。テンプレートは主要な財務指標から詳細なセグメント情報まで、企業決算情報を視覚的に表示します。
+このドキュメントは、3ページ構成に拡張された企業決算サマリーのHTML/CSSテンプレートの使用方法と各項目の入力データについて説明します。テンプレートは主要な財務指標から詳細なセグメント情報まで、企業決算情報を視覚的に表示します。厳格な評価基準を採用し、投資判断により役立つ情報を提供します。
 
 ## テンプレートの概要
 
@@ -15,7 +15,59 @@
 - 財務状態
 - 投資判断ポイント（ポジティブ要素・注意すべき要素）
 
-各セクションには10点満点の評価システムが設けられており、視覚的な評価メーターで表示されます（1-3点：要注意、4-6点：平均的、7-10点：良好-優秀）。
+各セクションには10点満点の評価システムが設けられており、視覚的な評価メーターで表示されます：
+- 1-3点：要注意（赤色）- 構造的な問題や重大な懸念事項がある
+- 4-6点：平均的（黄色）- 業界平均レベル、注視すべき課題あり
+- 7-10点：良好-優秀（緑色）- 業界平均を上回る、持続的競争力あり
+
+## 評価点数の厳格な定義（10点満点）
+
+```
+【10点】極めて優秀（業界トップ級、持続的競争優位性あり）
+【9点】非常に優秀（力強い成長、明確な差別化要因あり）
+【8点】優秀（安定した成長、一定の競争優位性）
+【7点】良好（平均を上回る、若干の懸念材料あり）
+【6点】やや良好（平均並み、注視すべき課題あり）
+【5点】平均的（業界平均、大きな懸念・期待なし）
+【4点】やや懸念（平均をやや下回る、複数の課題あり）
+【3点】懸念あり（明確な構造問題、改善の兆し不明確）
+【2点】重大な懸念（深刻な業績悪化、根本的な競争力低下）
+【1点】危機的（生存リスク、抜本的な事業再構築が必要）
+```
+
+## 投資判断の基準
+
+```
+【買い推奨★★★★★】 明確な競争優位性と持続的成長が期待でき、割安感もある優良銘柄
+【買い推奨★★★★】 堅調な業績と成長余地があり、適正な価格水準にある銘柄
+【買い推奨★★★】 一定の投資妙味はあるが、留意点もある銘柄
+【中立★★】 業績は安定しているが、積極的な投資理由に乏しい銘柄
+【弱気中立★】 業績に不安要素があり、改善を見極める必要がある銘柄
+【売り推奨】 構造的な問題があり、回復の見通しが立たない銘柄
+```
+
+## 企業タイプ別の評価基準
+
+テンプレートでは企業タイプに応じた評価基準を導入しています：
+
+### グロース株（成長株）評価基準
+- 売上高成長率が前年比10%未満の場合は6点以下
+- 営業利益成長率が前年比15%未満の場合は5点以下
+- 営業利益成長率が前年比5%未満の場合は3点以下
+- 来期予想が当期より成長率鈍化の場合は大幅減点（2〜3点減）
+- 成長セグメントの伸び率鈍化は厳しく評価
+
+### 高配当株評価基準
+- 配当性向が30%未満の場合は7点以上にしない
+- 配当利回りが業界平均を下回る場合は減点（1〜2点）
+- 連続増配がない場合は7点以上にしない
+- フリーキャッシュフローが配当総額を下回る場合は大幅減点
+
+### バリュー株評価基準
+- PERが業界平均の70%以下の場合は評価を上乗せ
+- PBRが1.0倍以下の場合は評価を上乗せ
+- ROEが資本コストを下回る場合は割安でも評価抑制
+- 株主還元策（増配・自社株買い）の積極性を重視
 
 ## ページ構成
 
@@ -32,55 +84,46 @@
 - `companyName`：会社の正式名称（例：トヨタ自動車）
 - `companyCode`：証券コード（例：7203）
 - `fiscalPeriod`：決算期（例：2025年3月期 決算サマリー）
-- `achievementBadge`：業績の特筆すべき成果（例：過去最高益達成）
+- `achievementBadge`：業績の特筆すべき成果（例：過去最高益達成だが成長鈍化）
+- `companyType`：企業タイプ（growth=グロース株、dividend=高配当株、value=バリュー株）
 
 ### 2. 総合評価サマリー（ページ1）
-- `overallRating`：総合評価点数（例：8.5）
-- `overallRatingText`：総合評価の表現（例：優秀（7-9点））
-- `overallSummary`：決算の総括（150字程度）
-- `recommendationText`：投資判断（例：買い推奨、中立、売り推奨）
+- `overallRating`：総合評価点数（例：6.5）- 企業タイプに応じた厳格評価
+- `overallRatingText`：総合評価の表現（例：やや良好（6-7点））
+- `overallSummary`：決算の総括（150字程度）- 客観的事実と課題の両方を記載
+- `recommendationText`：投資判断（例：買い推奨、強気中立、弱気中立、売り推奨）
 - `starRating`：投資判断の強さを星で表示（★～★★★★★）
-- `investmentReason`：投資判断の理由（100字程度）
-- `positivePoints`：ポジティブ要素（箇条書き、5点程度）
-- `negativePoints`：注意すべき要素（箇条書き、4点程度）
+- `investmentReason`：投資判断の理由（100字程度）- PER/PBRなどの指標も含める
+- `positivePoints`：ポジティブ要素（箇条書き、5点程度）- 実績に基づく客観的評価
+- `negativePoints`：注意すべき要素（箇条書き、4-5点程度）- リスク重視の評価
 
 ### 3. 決算ポイント（ページ1）
-- `keyPointsRating`：評価点数（例：8）
+- `keyPointsRating`：評価点数（例：5）- 一時的要因と構造的要因を区別
 - `keyPoints`：主な決算ポイント（配列形式、各要素に`positive`と`text`プロパティ）
   ```javascript
   keyPoints: [
-    { positive: true, text: '為替影響（円安）により、営業利益ベースで+150億円の押し上げ効果' },
-    { positive: true, text: '主力製品の販売好調により販売数量が前年比+7.2%増加' },
-    { positive: false, text: '原材料価格の上昇により、コスト増加要因（-120億円）' }
+    { positive: true, text: '為替影響（円安）により営業利益+150億円だが一時的要因' },
+    { positive: true, text: '主力製品の販売数量が前年比+7.2%増加も伸び率は前期の+9.1%から鈍化' },
+    { positive: false, text: '原材料価格上昇によるコスト増加（-120億円）は今後も継続見込み' }
   ]
   ```
-- `keyPointsRatingCategory`：評価カテゴリー（例：優秀）
-- `keyPointsPoint1~3`：評価根拠3点（各50-80字程度）
+- `keyPointsRatingCategory`：評価カテゴリー（例：平均的）
+- `keyPointsPoint1~3`：評価根拠3点（各50-80字程度）- 背景要因の分析も含める
 - `keyPointsPoint1Positive~3Positive`：各評価根拠のポジティブかネガティブかを示すブール値
-  ```javascript
-  keyPointsPoint1Positive: true,  // true=ポジティブ（緑色）、false=ネガティブ（赤色）
-  keyPointsPoint2Positive: true,
-  keyPointsPoint3Positive: false
-  ```
 
 ### 4. 業績ハイライト（ページ2）
-- `performanceRating`：業績評価点数（例：9）
+- `performanceRating`：業績評価点数（例：6）- 企業タイプに応じた厳格評価
 - `netIncome`：当期純利益（例：1,200億円）
-- `netIncomeChange`：前年比増減率（例：+18.5%）
+- `netIncomeChange`：前年比増減率（例：+12.5%）
 - `eps`：1株当たり利益（例：312.8円）
-- `epsChange`：前年比増減率（例：+22.7%）
+- `epsChange`：前年比増減率（例：+15.7%）
 - `dividend`：1株当たり配当金（例：62円）
 - `dividendChange`：前年比増減率（例：+24%）
 - `roe`：自己資本利益率（例：14.8%）
 - `roeChange`：前年比増減ポイント（例：+2.3pt）
-- `performanceRatingCategory`：評価カテゴリー（例：極めて優秀）
-- `performancePoint1~3`：評価根拠3点（各50-80字程度）
+- `performanceRatingCategory`：評価カテゴリー（例：やや良好）
+- `performancePoint1~3`：評価根拠3点（各50-80字程度）- 業界平均や競合との比較も含める
 - `performancePoint1Positive~3Positive`：各評価根拠のポジティブかネガティブかを示すブール値
-  ```javascript
-  performancePoint1Positive: true,  // true=ポジティブ（緑色）、false=ネガティブ（赤色）
-  performancePoint2Positive: true,
-  performancePoint3Positive: true
-  ```
 
 ### 5. 市場予想との比較（ページ2）
 - `sales`：売上高実績（例：8,500億円）
@@ -91,62 +134,47 @@
 - `operatingProfitVsForecast`：予想比（例：+11.1%）
 - `netIncomeForecast`：当期純利益予想（例：1,100億円）
 - `netIncomeVsForecast`：予想比（例：+9.1%）
-- `forecastComparisonRating`：評価点数（例：8）
-- `forecastComparisonCategory`：評価カテゴリー（例：優秀）
-- `forecastComparisonComment`：評価コメント（100字程度）
+- `forecastComparisonRating`：評価点数（例：5）- 予想の質も考慮（弱気予想は低評価）
+- `forecastComparisonCategory`：評価カテゴリー（例：平均的）
+- `forecastComparisonComment`：評価コメント（例：市場予想を上回るが、予想自体が保守的で前期比では減益）
 
 ### 6. 来期業績予想（ページ2）
-- `nextFiscalRating`：評価点数（例：7）
+- `nextFiscalRating`：評価点数（例：4）- 過去の予想精度も考慮
 - `nextFiscalNetIncome`：来期純利益予想（例：1,300億円）
 - `nextFiscalNetIncomeChange`：前年比増減率（例：+8.3%）
 - `nextFiscalDividend`：来期配当予想（例：68円（20.5%））
 - `nextFiscalDividendChange`：増減額（例：+6円）
-- `nextFiscalHighlight`：来期の注目ポイント（例：2期連続過去最高益更新を目指す）
-- `nextFiscalRatingCategory`：評価カテゴリー（例：良好）
-- `nextFiscalPoint1~3`：評価根拠3点（各50-80字程度）
+- `nextFiscalHighlight`：来期の注目ポイント（例：成長率鈍化を投資拡大で補う計画）
+- `nextFiscalRatingCategory`：評価カテゴリー（例：やや懸念）
+- `nextFiscalPoint1~3`：評価根拠3点（各50-80字程度）- 懸念材料も明示
 - `nextFiscalPoint1Positive~3Positive`：各評価根拠のポジティブかネガティブかを示すブール値
-  ```javascript
-  nextFiscalPoint1Positive: true,  // true=ポジティブ（緑色）、false=ネガティブ（赤色）
-  nextFiscalPoint2Positive: true, 
-  nextFiscalPoint3Positive: false
-  ```
 
 ### 7. セグメント評価（ページ3）
-- `segmentRating`：評価点数（例：8）
-- `segmentRatingCategory`：評価カテゴリー（例：優秀）
-- `segmentPoint1~3`：評価根拠3点（各50-80字程度）
+- `segmentRating`：評価点数（例：5）- 主力セグメントと成長セグメントを重視
+- `segmentRatingCategory`：評価カテゴリー（例：平均的）
+- `segmentPoint1~3`：評価根拠3点（各50-80字程度）- 業界平均比較も含める
 - `segmentPoint1Positive~3Positive`：各評価根拠のポジティブかネガティブかを示すブール値
-  ```javascript
-  segmentPoint1Positive: true,  // true=ポジティブ（緑色）、false=ネガティブ（赤色）
-  segmentPoint2Positive: true,
-  segmentPoint3Positive: false
-  ```
-- `segments`：セグメント別データ（配列形式）
+- `segments`：セグメント別データ（配列形式）- 成長鈍化や競争力低下も明記
   ```javascript
   segments: [
-    { name: '製造部門', value: '950億円', change: '+21.5%', description: '主力製品販売好調', profit: true },
-    { name: 'サービス部門', value: '280億円', change: '+9.8%', description: '保守契約増加', profit: true },
-    { name: '新規事業', value: '-85億円', change: '赤字継続', description: '研究開発投資継続', profit: false },
-    { name: 'その他', value: '55億円', change: '+5.2%', description: '関連事業好調', profit: true }
+    { name: '製造部門', value: '950億円', change: '+21.5%', description: '主力製品販売好調だが伸び率は鈍化', profit: true },
+    { name: 'サービス部門', value: '280億円', change: '+9.8%', description: '競合参入により成長鈍化', profit: true },
+    { name: '新規事業', value: '-85億円', change: '赤字拡大', description: '投資計画超過、黒字化遅延の懸念', profit: false },
+    { name: 'その他', value: '55億円', change: '+5.2%', description: '堅調だが全体への影響は限定的', profit: true }
   ]
   ```
 
 ### 8. 財務状態（ページ3）
-- `financialRating`：評価点数（例：9）
+- `financialRating`：評価点数（例：7）- 業界平均との比較重視
 - `equityRatio`：自己資本比率（例：44.8%）
 - `equityRatioChange`：前年比増減ポイント（例：+1.2pt）
 - `operatingCashFlow`：営業キャッシュフロー（例：1,550億円）
 - `operatingCashFlowChange`：前年比増減率（例：+15.3%）
 - `liquidAssets`：手元流動性（例：2,380億円）
 - `liquidAssetsChange`：前年比増減率（例：+8.5%）
-- `financialRatingCategory`：評価カテゴリー（例：極めて優秀）
-- `financialPoint1~3`：評価根拠3点（各50-80字程度）
+- `financialRatingCategory`：評価カテゴリー（例：良好）
+- `financialPoint1~3`：評価根拠3点（各50-80字程度）- 過剰資本など効率性も評価
 - `financialPoint1Positive~3Positive`：各評価根拠のポジティブかネガティブかを示すブール値
-  ```javascript
-  financialPoint1Positive: true,  // true=ポジティブ（緑色）、false=ネガティブ（赤色）
-  financialPoint2Positive: true,
-  financialPoint3Positive: true
-  ```
 
 ### 9. フッター情報（ページ3）
 - `dataSource`：データソース（例：株式会社サンプル 2025年3月期決算発表資料（2025年5月1日公表））
@@ -154,9 +182,9 @@
 ## 評価メーターシステム
 
 各評価セクションには視覚的な評価メーターが設けられており、点数に応じて自動的に幅と色が変更されます：
-- 1-3点：要注意（赤色）
-- 4-6点：平均的（黄色）
-- 7-10点：良好-優秀（緑色）
+- 1-3点：要注意（赤色）- 構造的な問題や重大な懸念事項がある
+- 4-6点：平均的（黄色）- 業界平均レベル、注視すべき課題あり
+- 7-10点：良好-優秀（緑色）- 業界平均を上回る、持続的競争力あり
 
 ## JavaScript関数
 
@@ -173,21 +201,37 @@
 ```javascript
 const companyData = {
   // 会社情報
-  companyAbbr: 'ABC',
+  companyAbbr: 'SFT',
   companyColor: '#3B82F6',
-  companyName: '株式会社サンプル',
-  companyCode: '1234',
+  companyName: 'ソフト株式会社',
+  companyCode: '9999',
   fiscalPeriod: '2025年3月期 決算サマリー',
-  achievementBadge: '過去最高益達成',
+  achievementBadge: '最高益更新も成長鈍化',
+  companyType: 'growth', // growth=グロース株、dividend=高配当株、value=バリュー株
   
   // 総合評価
-  overallRating: '8.5',
-  overallRatingText: '優秀（7-9点）',
-  overallSummary: '円安進行と主力製品の販売好調で過去最高益を更新。通期予想も上方修正し、配当増額と自社株買いを拡大。',
+  overallRating: '6.5',
+  overallRatingText: 'やや良好（6-7点）',
+  overallSummary: '前期比増収増益ながら成長率は鈍化。主力製品の販売は堅調だが、新製品の立ち上がりに遅れ。原材料価格上昇と開発費増で利益率は低下。来期は一桁成長予想で成長持続性に懸念。',
+  recommendationText: '弱気中立',
+  starRating: '★',
+  investmentReason: '成長率の鈍化傾向と利益率低下が懸念材料。競合他社と比較してPER15倍は割高感あり。一方で新製品開発は長期的にはプラス要因となる可能性。業績下方修正リスクに注意。',
   
-  // 評価ポイントの設定例（ポジティブ/ネガティブを区別）
-  performancePoint1: '純利益1,200億円は過去最高を更新（前年比+18.5%）',
-  performancePoint1Positive: true,  // true=ポジティブ（緑色）、false=ネガティブ（赤色）
+  // ポジティブ/ネガティブポイント
+  positivePoints: [
+    '主力製品は前年比+7.2%の増収を維持',
+    '営業利益は過去最高の1,500億円を達成',
+    '自己資本比率44.8%と業界平均を上回る財務基盤',
+    '研究開発投資を前年比+25%に拡大し将来成長に布石',
+    '営業CFは純利益の1.3倍と質の高い利益を維持'
+  ],
+  negativePoints: [
+    '主力製品の成長率が前期の+9.1%から+7.2%へ鈍化',
+    '営業利益率は9.3%と前期比-0.8ptの低下',
+    '原材料価格上昇による利益圧迫は今後も継続見込み',
+    '新規事業の赤字幅が計画を20%超過し黒字化が遅延',
+    '来期成長率予想は+8.3%と一桁成長にとどまる'
+  ],
   
   // 他のデータも同様に設定
   // ...
@@ -197,14 +241,41 @@ const companyData = {
 setCompanyData(companyData);
 ```
 
+## 企業タイプ別のポイント
+
+### グロース株評価の重要ポイント
+1. 売上・利益の成長率トレンド（加速/鈍化）
+2. 来期予想の成長性（二桁成長継続か）
+3. 主力製品のライフサイクルと新製品開発状況
+4. 成長投資の効率性（研究開発投資の回収状況）
+5. 業界内での相対的ポジションの変化
+
+### 高配当株評価の重要ポイント
+1. 配当性向と配当利回りの水準（業界比較）
+2. 配当の持続性と増配余力（FCF対比）
+3. 自社株買いとの併用状況
+4. 株主還元に対する経営姿勢
+5. 配当カバレッジの安定性
+
+### バリュー株評価の重要ポイント
+1. PER・PBR等のバリュエーション指標（業界比較）
+2. 収益性改善の兆候
+3. 構造改革や事業ポートフォリオ見直しの進捗
+4. 株主還元強化の可能性
+5. 含み資産の有無と活用可能性
+
 ## テンプレート使用のポイント
 
-1. レスポンシブデザイン対応：様々な画面サイズに対応した表示
-2. 評価メーターによる直感的な業績把握
-3. 3ページ構造による詳細情報の整理
-4. 色分けによる重要ポイントの視覚的区別（ポジティブ：緑色、注意点：赤色）
-5. ページナビゲーションによる簡単な画面切り替え
-6. 評価根拠の明示による判断材料の提供
+1. 企業タイプに応じた評価基準の適用（グロース/高配当/バリュー）
+2. 業界平均との比較による相対評価の重視
+3. 一時的要因と構造的要因の区別
+4. 成長率変化（加速/鈍化）のトレンド分析
+5. 将来予測の保守性/積極性の評価
+6. ネガティブ要素の明確な提示による投資リスクの可視化
+7. レスポンシブデザイン対応：様々な画面サイズに対応した表示
+8. 評価メーターによる直感的な業績把握
+9. 3ページ構造による詳細情報の整理
+10. 色分けによる重要ポイントの視覚的区別（ポジティブ：緑色、注意点：赤色）
 
 ## カスタマイズオプション
 
@@ -212,5 +283,6 @@ setCompanyData(companyData);
 1. 企業ロゴの背景色と略称
 2. 表示する財務指標（業種によってROEの代わりにROA等）
 3. セグメント構成（業種特有のセグメントに変更）
-4. 評価基準と表示カテゴリー
+4. 評価基準と表示カテゴリー（業種ごとに重視する指標を変更）
 5. 評価ポイントの色分け（ポジティブ/ネガティブの直感的な視覚表現）
+6. 企業タイプに応じた評価基準のカスタマイズ

@@ -1106,143 +1106,140 @@ function updateRatingMeter(meterId, ratingValue) {
   }
 }
 
-// テスト用のサンプルデータ
+// 企業決算サマリー用データテンプレート
+// 企業タイプに応じて評価基準が変わります（グロース株/高配当株/バリュー株）
 const sampleCompanyData = {
-  // 会社情報
-  companyAbbr: 'ABC',
-  companyColor: '#3B82F6', // 青色の例
-  companyName: '株式会社サンプル',
-  companyCode: '1234',
-  fiscalPeriod: '2025年3月期 決算サマリー',
-  achievementBadge: '過去最高益達成',
+  // 基本情報 - 会社情報
+  companyAbbr: '', // 会社の略称（3文字程度、例：TYT）
+  companyColor: '', // 会社ロゴの背景色（例：#3B82F6）
+  companyName: '', // 会社の正式名称（例：トヨタ自動車）
+  companyCode: '', // 証券コード（例：7203）
+  fiscalPeriod: '', // 決算期（例：2025年3月期 決算サマリー）
+  achievementBadge: '', // 業績の特筆すべき成果（例：過去最高益達成）
+  
+  // 企業タイプ（内部処理用、表示はされません）
+  // "growth"：グロース株、"dividend"：高配当株、"value"：バリュー株
+  companyType: 'growth',
   
   // 総合評価
-  overallRating: '8.5',
-  overallRatingText: '優秀（7-9点）',
-  overallSummary: '円安進行と主力製品の販売好調で過去最高益を更新。通期予想も上方修正し、配当増額と自社株買いを拡大。',
-  recommendationText: '買い推奨',
-  starRating: '★★★★☆',
-  investmentReason: '過去最高益達成と積極的な株主還元策、次世代製品開発の加速から中長期の成長性も評価。PER10.5倍と割安感も魅力。',
+  overallRating: '', // 総合評価点数（例：7.5）- グロース株は成長鈍化で厳しく評価
+  overallRatingText: '', // 総合評価カテゴリー（例：良好（7点）、要注意（3点））
+  overallSummary: '', // 決算の総括（150字程度）- 客観的事実を重視
+  recommendationText: '', // 投資判断（買い推奨、強気中立、弱気中立、売り推奨）
+  starRating: '', // 投資判断の強さ（★～★★★★★）
+  investmentReason: '', // 投資判断の理由（100字程度）- PER/PBRなどの指標も含める
+  
+  // ポジティブ/ネガティブポイント
+  positivePoints: [
+    // 5点程度のポジティブ要素（客観的事実を中心に）
+  ],
+  negativePoints: [
+    // 4-5点程度のネガティブ要素（リスク重視、甘くない評価）
+  ],
   
   // 業績ハイライト
-  performanceRating: '9',
-  netIncome: '1,200億円',
-  netIncomeChange: '+18.5%',
-  eps: '312.8円',
-  epsChange: '+22.7%',
-  dividend: '62円',
-  dividendChange: '+24%',
-  roe: '14.8%',
-  roeChange: '+2.3pt',
-  performanceRatingCategory: '極めて優秀',
-  performancePoint1: '純利益1,200億円は過去最高を更新（前年比+18.5%）',
-  performancePoint2: 'ROEは14.8%と資本効率が大幅に向上（+2.3pt）',
-  performancePoint3: '配当は62円と実質増配（配当性向19.8%）、自社株買いも500億円規模で実施',
-  performancePoint1Positive: true,
-  performancePoint2Positive: true,
-  performancePoint3Positive: true,
+  performanceRating: '', // 業績評価点数（例：6）- 企業タイプに応じた厳格評価
+  netIncome: '', // 当期純利益（例：1,200億円）
+  netIncomeChange: '', // 前年比増減率（例：+18.5%）
+  eps: '', // 1株当たり利益（例：312.8円）
+  epsChange: '', // 前年比増減率（例：+22.7%）
+  dividend: '', // 1株当たり配当金（例：62円）
+  dividendChange: '', // 前年比増減率（例：+24%）
+  roe: '', // 自己資本利益率（例：14.8%）
+  roeChange: '', // 前年比増減ポイント（例：+2.3pt）
+  performanceRatingCategory: '', // 評価カテゴリー（例：良好、平均的、要注意）
+  performancePoint1: '', // 評価根拠1（例：純利益1,200億円は過去最高更新だが成長率は鈍化（前年比+18.5%→今期+12.2%））
+  performancePoint2: '', // 評価根拠2（例：ROEは14.8%と資本効率は向上しているが業界平均16.2%を下回る）
+  performancePoint3: '', // 評価根拠3（例：営業利益率は9.3%と前期比-0.8ptと悪化傾向）
+  performancePoint1Positive: true, // true=ポジティブ評価、false=ネガティブ評価
+  performancePoint2Positive: false, // true=ポジティブ評価、false=ネガティブ評価
+  performancePoint3Positive: false, // true=ポジティブ評価、false=ネガティブ評価
   
   // 市場予想との比較
-  sales: '8,500億円',
-  salesForecast: '8,200億円',
-  salesVsForecast: '+3.7%',
-  operatingProfit: '1,500億円',
-  operatingProfitForecast: '1,350億円',
-  operatingProfitVsForecast: '+11.1%',
-  netIncomeForecast: '1,100億円',
-  netIncomeVsForecast: '+9.1%',
-  forecastComparisonRating: '8',
-  forecastComparisonCategory: '優秀',
-  forecastComparisonComment: '全ての主要指標で市場予想を上回る好決算。特に営業利益は予想を11.1%上回り、利益率の改善が顕著。',
-
+  sales: '', // 売上高実績（例：8,500億円）
+  salesForecast: '', // 売上高予想（例：8,200億円）
+  salesVsForecast: '', // 予想比（例：+3.7%）
+  operatingProfit: '', // 営業利益実績（例：1,500億円）
+  operatingProfitForecast: '', // 営業利益予想（例：1,350億円）
+  operatingProfitVsForecast: '', // 予想比（例：+11.1%）
+  netIncomeForecast: '', // 当期純利益予想（例：1,100億円）
+  netIncomeVsForecast: '', // 予想比（例：+9.1%）
+  forecastComparisonRating: '', // 評価点数（例：6）- 予想の質も考慮
+  forecastComparisonCategory: '', // 評価カテゴリー
+  forecastComparisonComment: '', // 評価コメント（例：市場予想を上回るが、予想自体が保守的で前期比では減益）
+  
   // 決算ポイント
-  keyPointsRating: '8',
+  keyPointsRating: '', // 評価点数（例：5）- 一時的/構造的要因を区別
   keyPoints: [
-    { positive: true, text: '為替影響（円安）により、営業利益ベースで+150億円の押し上げ効果' },
-    { positive: true, text: '主力製品の販売好調により販売数量が前年比+7.2%増加' },
-    { positive: false, text: '原材料価格の上昇により、コスト増加要因（-120億円）' }
+    // 主な決算ポイント（プラス要因、マイナス要因を客観的に）
+    { positive: true, text: '為替影響（円安）により、営業利益ベースで+150億円の押し上げ効果だが一時的要因' },
+    { positive: true, text: '主力製品の販売好調により販売数量が前年比+7.2%増加も伸び率は前期の+9.1%から鈍化' },
+    { positive: false, text: '原材料価格の上昇により、コスト増加要因（-120億円）は今後も継続見込み' }
   ],
-  keyPointsRatingCategory: '優秀',
-  keyPointsPoint1: '円安効果による大幅増益（+150億円）は一時的要因ながら収益のレジリエンスを示す',
-  keyPointsPoint2: '主力製品の販売増（+7.2%）は高利益率製品へのシフトを反映',
-  keyPointsPoint3: '原材料コスト増（-120億円）は利益率圧迫要因だが、コスト削減で一部相殺',
-  keyPointsPoint1Positive: true,
-  keyPointsPoint2Positive: true,
-  keyPointsPoint3Positive: false,
+  keyPointsRatingCategory: '', // 評価カテゴリー
+  keyPointsPoint1: '', // 評価根拠1（例：円安効果（+150億円）は一時的要因であり、本業の競争力とは区別して評価）
+  keyPointsPoint2: '', // 評価根拠2（例：主力製品の成長鈍化（+9.1%→+7.2%）は市場飽和の兆候）
+  keyPointsPoint3: '', // 評価根拠3（例：コスト増加は業界共通だが、価格転嫁の遅れによる利益率低下は競争力低下の懸念）
+  keyPointsPoint1Positive: false, // true=ポジティブ評価、false=ネガティブ評価
+  keyPointsPoint2Positive: false, // true=ポジティブ評価、false=ネガティブ評価
+  keyPointsPoint3Positive: false, // true=ポジティブ評価、false=ネガティブ評価
   
   // 来期業績予想
-  nextFiscalRating: '7',
-  nextFiscalNetIncome: '1,300億円',
-  nextFiscalNetIncomeChange: '+8.3%',
-  nextFiscalDividend: '68円（20.5%）',
-  nextFiscalDividendChange: '+6円',
-  nextFiscalHighlight: '2期連続過去最高益更新を目指す',
-  nextFiscalRatingCategory: '良好',
-  nextFiscalPoint1: '当期純利益1,300億円予想は保守的ながら増益（+8.3%）',
-  nextFiscalPoint2: '配当は68円へ増額（+6円）し、株主還元を強化',
-  nextFiscalPoint3: '前提為替レートは1ドル=135円と保守的設定。為替変動次第で上振れ余地あり',
-  nextFiscalPoint1Positive: true,
-  nextFiscalPoint2Positive: true,
-  nextFiscalPoint3Positive: false,
+  nextFiscalRating: '', // 評価点数（例：4）- 過去の予想精度も考慮
+  nextFiscalNetIncome: '', // 来期純利益予想（例：1,300億円）
+  nextFiscalNetIncomeChange: '', // 前年比増減率（例：+8.3%）
+  nextFiscalDividend: '', // 来期配当予想（例：68円（20.5%））
+  nextFiscalDividendChange: '', // 増減額（例：+6円）
+  nextFiscalHighlight: '', // 来期の注目ポイント（例：成長率鈍化を投資拡大で補う計画）
+  nextFiscalRatingCategory: '', // 評価カテゴリー
+  nextFiscalPoint1: '', // 評価根拠1（例：純利益成長率の更なる鈍化（+18.5%→+8.3%）は構造的課題を示唆）
+  nextFiscalPoint2: '', // 評価根拠2（例：配当増額は評価できるが配当性向20.5%は業界平均30%を大きく下回る）
+  nextFiscalPoint3: '', // 評価根拠3（例：保守的な為替前提は評価できるが、本業の競争力強化策が不明確）
+  nextFiscalPoint1Positive: false, // true=ポジティブ評価、false=ネガティブ評価
+  nextFiscalPoint2Positive: true, // true=ポジティブ評価、false=ネガティブ評価
+  nextFiscalPoint3Positive: false, // true=ポジティブ評価、false=ネガティブ評価
   
   // セグメント評価
-  segmentRating: '8',
-  segmentRatingCategory: '優秀',
-  segmentPoint1: '主力の製造セグメントが利益率9.5%（+1.2pt）と改善',
-  segmentPoint2: 'サービスセグメントが利益率17.8%（+2.3pt）と高水準を維持',
-  segmentPoint3: '新規事業は先行投資フェーズで赤字（-85億円）も計画内',
-  segmentPoint1Positive: true,
-  segmentPoint2Positive: true,
-  segmentPoint3Positive: false,
+  segmentRating: '', // 評価点数（例：5）- 主力セグメントの動向重視
+  segmentRatingCategory: '', // 評価カテゴリー
+  segmentPoint1: '', // 評価根拠1（例：主力製造セグメントの利益率9.5%は前期比+1.2ptも業界平均12.3%を下回る）
+  segmentPoint2: '', // 評価根拠2（例：成長期待のサービスセグメントの伸び率が+15.2%から+9.8%へ鈍化）
+  segmentPoint3: '', // 評価根拠3（例：新規事業の赤字幅（-85億円）拡大は投資フェーズを考慮しても計画を20%超過）
+  segmentPoint1Positive: false, // true=ポジティブ評価、false=ネガティブ評価
+  segmentPoint2Positive: false, // true=ポジティブ評価、false=ネガティブ評価
+  segmentPoint3Positive: false, // true=ポジティブ評価、false=ネガティブ評価
   
   // セグメント別業績
   segments: [
-    { name: '製造部門', value: '950億円', change: '+21.5%', description: '主力製品販売好調', profit: true },
-    { name: 'サービス部門', value: '280億円', change: '+9.8%', description: '保守契約増加', profit: true },
-    { name: '新規事業', value: '-85億円', change: '赤字継続', description: '研究開発投資継続', profit: false },
-    { name: 'その他', value: '55億円', change: '+5.2%', description: '関連事業好調', profit: true }
-  ],
-  
-  // 投資判断ポイント
-  investmentDecisionText: '買い推奨',
-  investmentStars: '★★★★☆',
-  investmentDecisionReason: '為替変動に左右されない強固な収益基盤と積極的な株主還元策、次世代製品への戦略的投資で中長期の成長性も高く評価できる。PER10.5倍と割安感もあり、中長期保有で高いリターンが期待できる。',
-  
-  // ポジティブ要素と注意点
-  positivePoints: [
-    '過去最高益達成と2期連続増益見通し',
-    '配当増額と500億円規模の自社株買いによる高い株主還元',
-    '主力製品販売好調による収益性向上（営業利益率9.5%）',
-    '次世代製品開発への積極投資（3年で300億円規模）',
-    'PER10.5倍と割安なバリュエーション'
-  ],
-  negativePoints: [
-    '為替感応度が高く円高に転じた場合の利益減少リスク',
-    '新規事業分野での競争激化',
-    '原材料価格上昇による収益圧迫懸念',
-    '各国の環境規制強化による追加コスト発生可能性'
+    // セグメント別データ（業績、増減率、評価コメント）
+    { name: '製造部門', value: '950億円', change: '+21.5%', description: '主力製品販売好調だが伸び率は鈍化', profit: true },
+    { name: 'サービス部門', value: '280億円', change: '+9.8%', description: '競合参入により成長鈍化', profit: true },
+    { name: '新規事業', value: '-85億円', change: '赤字拡大', description: '投資計画超過、黒字化遅延の懸念', profit: false },
+    { name: 'その他', value: '55億円', change: '+5.2%', description: '堅調だが全体への影響は限定的', profit: true }
   ],
   
   // 財務状態
-  financialRating: '9',
-  equityRatio: '44.8%',
-  equityRatioChange: '+1.2pt',
-  operatingCashFlow: '1,550億円',
-  operatingCashFlowChange: '+15.3%',
-  liquidAssets: '2,380億円',
-  liquidAssetsChange: '+8.5%',
-  financialRatingCategory: '極めて優秀',
-  financialPoint1: '自己資本比率44.8%は業界トップクラスの財務安定性',
-  financialPoint2: '営業CF1,550億円（+15.3%）と潤沢なキャッシュ創出力',
-  financialPoint3: '手元流動性2,380億円（売上高比28.0%）は大型投資と株主還元の余力十分',
-  financialPoint1Positive: true,
-  financialPoint2Positive: true,
-  financialPoint3Positive: true,
+  financialRating: '', // 評価点数（例：7）- 業界平均との比較重視
+  equityRatio: '', // 自己資本比率（例：44.8%）
+  equityRatioChange: '', // 前年比増減ポイント（例：+1.2pt）
+  operatingCashFlow: '', // 営業キャッシュフロー（例：1,550億円）
+  operatingCashFlowChange: '', // 前年比増減率（例：+15.3%）
+  liquidAssets: '', // 手元流動性（例：2,380億円）
+  liquidAssetsChange: '', // 前年比増減率（例：+8.5%）
+  financialRatingCategory: '', // 評価カテゴリー
+  financialPoint1: '', // 評価根拠1（例：自己資本比率44.8%は業界平均の40.2%を上回る堅実な財務体質）
+  financialPoint2: '', // 評価根拠2（例：営業CF1,550億円（純利益比1.3倍）は会計操作の余地が少なく質の高い利益を示唆）
+  financialPoint3: '', // 評価根拠3（例：手元流動性2,380億円（売上高比28.0%）は過剰であり、資本効率の改善余地あり）
+  financialPoint1Positive: true, // true=ポジティブ評価、false=ネガティブ評価
+  financialPoint2Positive: true, // true=ポジティブ評価、false=ネガティブ評価
+  financialPoint3Positive: false, // true=ポジティブ評価、false=ネガティブ評価
   
   // データソース
-  dataSource: '株式会社サンプル 2025年3月期決算発表資料（2025年5月1日公表）'
+  dataSource: '' // データソース（例：○○株式会社 2025年3月期決算発表資料（2025年5月1日公表））
 };
-// ページ読み込み時に初期化
+
+// テンプレートの適用
+// setCompanyData(companyData);
 document.addEventListener('DOMContentLoaded', function() {
   // サンプルデータをセット
   setCompanyData(sampleCompanyData);
