@@ -350,15 +350,15 @@
           <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
             <p class="font-bold mb-1">評価根拠：<span id="key-points-rating-text">/10</span>（<span id="key-points-rating-category"></span>）</p>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="key-points-point-1-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="key-points-point-1"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="key-points-point-2-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="key-points-point-2"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-amber-500"></span>
+              <span id="key-points-point-3-icon" class="evaluation-point-icon text-amber-500">●</span>
               <span id="key-points-point-3"></span>
             </div>
           </div>
@@ -456,15 +456,15 @@
           <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
             <p class="font-bold mb-1">評価根拠：<span id="performance-rating-text">/10</span>（<span id="performance-rating-category"></span>）</p>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="performance-point-1-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="performance-point-1"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="performance-point-2-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="performance-point-2"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="performance-point-3-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="performance-point-3"></span>
             </div>
           </div>
@@ -557,15 +557,15 @@
           <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
             <p class="font-bold mb-1">評価根拠：<span id="next-fiscal-rating-text">/10</span>（<span id="next-fiscal-rating-category"></span>）</p>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="next-fiscal-point-1-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="next-fiscal-point-1"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="next-fiscal-point-2-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="next-fiscal-point-2"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-amber-500"></span>
+              <span id="next-fiscal-point-3-icon" class="evaluation-point-icon text-amber-500">●</span>
               <span id="next-fiscal-point-3"></span>
             </div>
           </div>
@@ -631,15 +631,15 @@
           <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
             <p class="font-bold mb-1">評価根拠：<span id="segment-rating-text">/10</span>（<span id="segment-rating-category"></span>）</p>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="segment-point-1-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="segment-point-1"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="segment-point-2-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="segment-point-2"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-amber-500"></span>
+              <span id="segment-point-3-icon" class="evaluation-point-icon text-amber-500">●</span>
               <span id="segment-point-3"></span>
             </div>
           </div>
@@ -698,15 +698,15 @@
           <div class="mt-2 text-xs text-gray-700 bg-blue-50 p-2 rounded">
             <p class="font-bold mb-1">評価根拠：<span id="financial-rating-text">/10</span>（<span id="financial-rating-category"></span>）</p>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="financial-point-1-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="financial-point-1"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="financial-point-2-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="financial-point-2"></span>
             </div>
             <div class="evaluation-point">
-              <span class="evaluation-point-icon text-green-600"></span>
+              <span id="financial-point-3-icon" class="evaluation-point-icon text-green-600">●</span>
               <span id="financial-point-3"></span>
             </div>
           </div>
@@ -829,9 +829,23 @@ function setCompanyData(data) {
   `;
   document.getElementById('performance-rating-text').textContent = data.performanceRating ? `${data.performanceRating}/10` : '/10';
   document.getElementById('performance-rating-category').textContent = data.performanceRatingCategory || '';
+  
+  // 評価ポイントのアイコン色設定
+  function setPointIconColor(pointIdPrefix, index, isPositive) {
+    const iconElement = document.getElementById(`${pointIdPrefix}-${index}-icon`);
+    if (iconElement) {
+      iconElement.className = `evaluation-point-icon ${isPositive ? 'text-green-600' : 'text-red-600'}`;
+    }
+  }
+  
+  // 業績評価ポイントの設定
   document.getElementById('performance-point-1').textContent = data.performancePoint1 || '';
   document.getElementById('performance-point-2').textContent = data.performancePoint2 || '';
   document.getElementById('performance-point-3').textContent = data.performancePoint3 || '';
+  // 業績評価ポイントのアイコン色設定
+  setPointIconColor('performance-point', 1, data.performancePoint1Positive !== false);
+  setPointIconColor('performance-point', 2, data.performancePoint2Positive !== false);
+  setPointIconColor('performance-point', 3, data.performancePoint3Positive !== false);
   
   document.getElementById('sales').textContent = data.sales || '';
   document.getElementById('sales-forecast').textContent = data.salesForecast || '';
@@ -888,6 +902,10 @@ function setCompanyData(data) {
   document.getElementById('key-points-point-1').textContent = data.keyPointsPoint1 || '';
   document.getElementById('key-points-point-2').textContent = data.keyPointsPoint2 || '';
   document.getElementById('key-points-point-3').textContent = data.keyPointsPoint3 || '';
+  // 決算ポイントのアイコン色設定
+  setPointIconColor('key-points-point', 1, data.keyPointsPoint1Positive !== false);
+  setPointIconColor('key-points-point', 2, data.keyPointsPoint2Positive !== false);
+  setPointIconColor('key-points-point', 3, data.keyPointsPoint3Positive !== false);
   
   document.getElementById('segment-rating-badge').textContent = `評価: ${data.segmentRating || ''}/10`;
   document.getElementById('segment-rating-text').textContent = data.segmentRating ? `${data.segmentRating}/10` : '/10';
@@ -895,6 +913,10 @@ function setCompanyData(data) {
   document.getElementById('segment-point-1').textContent = data.segmentPoint1 || '';
   document.getElementById('segment-point-2').textContent = data.segmentPoint2 || '';
   document.getElementById('segment-point-3').textContent = data.segmentPoint3 || '';
+  // セグメント評価ポイントのアイコン色設定
+  setPointIconColor('segment-point', 1, data.segmentPoint1Positive !== false);
+  setPointIconColor('segment-point', 2, data.segmentPoint2Positive !== false);
+  setPointIconColor('segment-point', 3, data.segmentPoint3Positive !== false);
   
   const segmentsContainer = document.getElementById('segments-container');
   segmentsContainer.innerHTML = ''; // 既存のセグメントをクリア
@@ -970,12 +992,12 @@ function setCompanyData(data) {
   document.getElementById('next-fiscal-point-1').textContent = data.nextFiscalPoint1 || '';
   document.getElementById('next-fiscal-point-2').textContent = data.nextFiscalPoint2 || '';
   document.getElementById('next-fiscal-point-3').textContent = data.nextFiscalPoint3 || '';
+  // 来期業績評価ポイントのアイコン色設定
+  setPointIconColor('next-fiscal-point', 1, data.nextFiscalPoint1Positive !== false);
+  setPointIconColor('next-fiscal-point', 2, data.nextFiscalPoint2Positive !== false);
+  setPointIconColor('next-fiscal-point', 3, data.nextFiscalPoint3Positive !== false);
   
-  // // ページ3のデータを設定
-  // document.getElementById('investment-decision-text').textContent = data.investmentDecisionText || '';
-  // document.getElementById('investment-stars').textContent = data.investmentStars || '';
-  // document.getElementById('investment-decision-reason').textContent = data.investmentDecisionReason || '';
-  
+  // ページ3のデータを設定
   const positivePointsContainer = document.getElementById('positive-points');
   positivePointsContainer.innerHTML = ''; // 既存のポイントをクリア
   
@@ -1027,6 +1049,10 @@ function setCompanyData(data) {
   document.getElementById('financial-point-1').textContent = data.financialPoint1 || '';
   document.getElementById('financial-point-2').textContent = data.financialPoint2 || '';
   document.getElementById('financial-point-3').textContent = data.financialPoint3 || '';
+  // 財務評価ポイントのアイコン色設定
+  setPointIconColor('financial-point', 1, data.financialPoint1Positive !== false);
+  setPointIconColor('financial-point', 2, data.financialPoint2Positive !== false);
+  setPointIconColor('financial-point', 3, data.financialPoint3Positive !== false);
   
   document.getElementById('data-source').textContent = data.dataSource || '';
   
@@ -1112,6 +1138,9 @@ const sampleCompanyData = {
   performancePoint1: '純利益1,200億円は過去最高を更新（前年比+18.5%）',
   performancePoint2: 'ROEは14.8%と資本効率が大幅に向上（+2.3pt）',
   performancePoint3: '配当は62円と実質増配（配当性向19.8%）、自社株買いも500億円規模で実施',
+  performancePoint1Positive: true,
+  performancePoint2Positive: true,
+  performancePoint3Positive: true,
   
   // 市場予想との比較
   sales: '8,500億円',
@@ -1137,6 +1166,9 @@ const sampleCompanyData = {
   keyPointsPoint1: '円安効果による大幅増益（+150億円）は一時的要因ながら収益のレジリエンスを示す',
   keyPointsPoint2: '主力製品の販売増（+7.2%）は高利益率製品へのシフトを反映',
   keyPointsPoint3: '原材料コスト増（-120億円）は利益率圧迫要因だが、コスト削減で一部相殺',
+  keyPointsPoint1Positive: true,
+  keyPointsPoint2Positive: true,
+  keyPointsPoint3Positive: false,
   
   // 来期業績予想
   nextFiscalRating: '7',
@@ -1149,6 +1181,9 @@ const sampleCompanyData = {
   nextFiscalPoint1: '当期純利益1,300億円予想は保守的ながら増益（+8.3%）',
   nextFiscalPoint2: '配当は68円へ増額（+6円）し、株主還元を強化',
   nextFiscalPoint3: '前提為替レートは1ドル=135円と保守的設定。為替変動次第で上振れ余地あり',
+  nextFiscalPoint1Positive: true,
+  nextFiscalPoint2Positive: true,
+  nextFiscalPoint3Positive: false,
   
   // セグメント評価
   segmentRating: '8',
@@ -1156,6 +1191,9 @@ const sampleCompanyData = {
   segmentPoint1: '主力の製造セグメントが利益率9.5%（+1.2pt）と改善',
   segmentPoint2: 'サービスセグメントが利益率17.8%（+2.3pt）と高水準を維持',
   segmentPoint3: '新規事業は先行投資フェーズで赤字（-85億円）も計画内',
+  segmentPoint1Positive: true,
+  segmentPoint2Positive: true,
+  segmentPoint3Positive: false,
   
   // セグメント別業績
   segments: [
@@ -1197,6 +1235,9 @@ const sampleCompanyData = {
   financialPoint1: '自己資本比率44.8%は業界トップクラスの財務安定性',
   financialPoint2: '営業CF1,550億円（+15.3%）と潤沢なキャッシュ創出力',
   financialPoint3: '手元流動性2,380億円（売上高比28.0%）は大型投資と株主還元の余力十分',
+  financialPoint1Positive: true,
+  financialPoint2Positive: true,
+  financialPoint3Positive: true,
   
   // データソース
   dataSource: '株式会社サンプル 2025年3月期決算発表資料（2025年5月1日公表）'
